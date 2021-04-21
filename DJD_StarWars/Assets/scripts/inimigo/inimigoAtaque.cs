@@ -10,7 +10,7 @@ public class inimigoAtaque : MonoBehaviour
     float timer;
 
     [SerializeField]
-    private float distAtack = 2f;
+    private float distAtack;
 
     [SerializeField]
     private GameObject bullet;
@@ -65,5 +65,10 @@ public class inimigoAtaque : MonoBehaviour
         Vector2 lookDirection = target.position - this.transform.position;
         float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
         arm.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
+    }
+
+    public float getDistAttack()
+    {
+        return distAtack;
     }
 }

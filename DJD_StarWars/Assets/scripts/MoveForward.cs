@@ -24,7 +24,6 @@ public class MoveForward : MonoBehaviour
     private void FixedUpdate()
     {
         timer += Time.fixedDeltaTime;
-
         transform.position = startPos + moveVector * speed * timer;
     }
 
