@@ -10,47 +10,41 @@ public class inimigoAtaque : MonoBehaviour
     float timer;
 
     [SerializeField]
-    private float distAtack = 2f;
+    private float distAtack;
 
     [SerializeField]
     private GameObject bullet;
 
     [SerializeField]
-    private GameObject arm;
+    private Transform arm;
 
-    //target jogador
+    //target = player
     private Transform target;
 
     // Start is called before the first frame update
     void Start()
     {
         //FAZER
-        //meter coldTime random
-        //bullet ter o seu proprio script com mov e destori e tal
-        //perceber cena do braco
-        //arranjar variaveis
-        //descrever melhor cenas
+        //meter pos direcao tiro + random em y para dar aquela cena de não ser sempre em cima player
     }
 
     void FixedUpdate()
     {
         target = GameObject.Find("player").transform;
-
-        rotationArm();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //distancia entre jogador e inimigo
+        //dist between player and enemy
         float distPlayer = Vector3.Distance(target.position, this.gameObject.transform.position);
 
-        //se a dist for menor do que a dist Ataque
+        //if dist is short than distAtack 
         if(distPlayer <= distAtack)
         {
             timer += Time.deltaTime;
+            rotationArm();
 
-            //inimigo dispara de cooldownTime em cooldownTime tempo
             if(timer >= cooldownTime)
             {
                 Fire(target);
@@ -59,18 +53,22 @@ public class inimigoAtaque : MonoBehaviour
         }
     }
 
-    //spawn Tiro
+    //spawn bullet at arm position
     void Fire(Transform target)
     {
-        GameObject firedBullet = Instantiate(bullet, arm.transform.position, arm.transform.rotation);
-        firedBullet.GetComponent<Rigidbody2D>().velocity = arm.transform.up * 12f;
+        GameObject firedBullet = Instantiate(bullet, arm.position, arm.rotation);
     }
 
-    //braco atualizar pos consoante player
+    //update rotation arm
     void rotationArm()
     {
         Vector2 lookDirection = target.position - this.transform.position;
         float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
-        arm.transform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
+        arm.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
+    }
+
+    public float getDistAttack()
+    {
+        return distAtack;
     }
 }
