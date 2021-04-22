@@ -24,8 +24,7 @@ public class inimigoAtaque : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //FAZER
-        //meter pos direcao tiro + random em y para dar aquela cena de não ser sempre em cima player
+
     }
 
     void FixedUpdate()
@@ -56,7 +55,12 @@ public class inimigoAtaque : MonoBehaviour
     //spawn bullet at arm position
     void Fire(Transform target)
     {
-        GameObject firedBullet = Instantiate(bullet, arm.position, arm.rotation);
+        //arm rotation + random rotation in z to do a bullet "imprevissivel"
+        Vector3 posRot = arm.rotation.eulerAngles;
+        posRot.z += Random.Range(-15,5);
+        Quaternion quaternion = Quaternion.Euler(posRot.x, posRot.y, posRot.z);
+
+        GameObject firedBullet = Instantiate(bullet, arm.position, quaternion);
     }
 
     //update rotation arm
