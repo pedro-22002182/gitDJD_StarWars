@@ -6,7 +6,7 @@ public class inimigoAtaque : MonoBehaviour
 {
 
     [SerializeField]
-    private float cooldownTime = 0.5f; 
+    private float cooldownTime = 1.2f; 
     float timer;
 
     [SerializeField]
