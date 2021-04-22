@@ -147,7 +147,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 180270963}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.172, y: -0.117, z: 0}
+  m_LocalPosition: {x: -0.025, y: -0.154, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 519032317}
@@ -163,10 +163,12 @@ GameObject:
   m_Component:
   - component: {fileID: 519032317}
   - component: {fileID: 519032316}
+  - component: {fileID: 519032323}
   - component: {fileID: 519032318}
   - component: {fileID: 519032319}
   - component: {fileID: 519032320}
   - component: {fileID: 519032321}
+  - component: {fileID: 519032322}
   m_Layer: 0
   m_Name: inimigo
   m_TagString: Untagged
@@ -233,7 +235,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519032315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.1068, y: 0.36, z: -12.652584}
+  m_LocalPosition: {x: 8.6, y: 0.36, z: -12.652584}
   m_LocalScale: {x: 8.304992, y: 8.304992, z: 8.304992}
   m_Children:
   - {fileID: 772126719}
@@ -254,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldownTime: 1
-  distAtack: 12
+  distAtack: 9
   bullet: {fileID: 1371309725}
   arm: {fileID: 772126719}
 --- !u!114 &519032319
@@ -270,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  distMaxMov: 15
+  distMaxMov: 11
 --- !u!50 &519032320
 Rigidbody2D:
   serializedVersion: 4
@@ -318,6 +320,39 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.2}
   m_EdgeRadius: 0
+--- !u!114 &519032322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519032315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ac1f2e466efde145bf60fc404827118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeForThrow: 0.02
+  speedThorw: 90
+--- !u!114 &519032323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519032315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c40e69a137fe474baf7b71e48812c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vida: 100
+  dano: 10
+  groundCheckObject: {fileID: 180270964}
+  groundCheckRadius: 0.3
+  groundCheckLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &772126718
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +446,7 @@ GameObject:
   - component: {fileID: 966560456}
   - component: {fileID: 966560455}
   - component: {fileID: 966560453}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: chao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -529,7 +564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1371309726
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -679,7 +714,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1446649445}
   - component: {fileID: 1446649444}
-  - component: {fileID: 1446649446}
   - component: {fileID: 1446649447}
   - component: {fileID: 1446649448}
   m_Layer: 0
@@ -754,20 +788,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1446649446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1446649443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ac1f2e466efde145bf60fc404827118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeForThrow: 0.025
-  speedThorw: 120
 --- !u!61 &1446649447
 BoxCollider2D:
   m_ObjectHideFlags: 0

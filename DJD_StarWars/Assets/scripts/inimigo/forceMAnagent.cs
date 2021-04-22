@@ -10,10 +10,10 @@ public class forceMAnagent : MonoBehaviour
 
     //Variables for throw
     [SerializeField]
-    private float timeForThrow = 0.025f;
+    private float timeForThrow = 0.02f;
 
     [SerializeField]
-    private float speedThorw = 120;
+    private float speedThorw = 90;
 
     private bool isThrow;
     private float timeThrow;

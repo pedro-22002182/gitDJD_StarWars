@@ -35,19 +35,23 @@ public class inimigoAtaque : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //dist between player and enemy
-        float distPlayer = Vector3.Distance(target.position, this.gameObject.transform.position);
 
-        //if dist is short than distAtack 
-        if(distPlayer <= distAtack)
+        if(GetComponent<inimoBase>().GroundCheck() == true)
         {
-            timer += Time.deltaTime;
-            rotationArm();
+            //dist between player and enemy
+            float distPlayer = Vector3.Distance(target.position, this.gameObject.transform.position);
 
-            if(timer >= cooldownTime)
+            //if dist is short than distAtack 
+            if(distPlayer <= distAtack)
             {
-                Fire(target);
-                timer = 0;
+                timer += Time.deltaTime;
+                rotationArm();
+
+                if(timer >= cooldownTime)
+                {
+                    Fire(target);
+                    timer = 0;
+                }
             }
         }
     }
@@ -75,4 +79,6 @@ public class inimigoAtaque : MonoBehaviour
     {
         return distAtack;
     }
+
+    
 }

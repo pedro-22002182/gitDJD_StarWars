@@ -11,6 +11,17 @@ public class inimoBase : MonoBehaviour
     [SerializeField]
     private float dano = 10;
 
+    private bool isGround;
+
+    [SerializeField]
+    private Transform groundCheckObject;
+
+    [SerializeField]
+    private float groundCheckRadius;
+
+    [SerializeField]
+    private LayerMask groundCheckLayer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +31,8 @@ public class inimoBase : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Collider2D collider = Physics2D.OverlapCircle(groundCheckObject.position, groundCheckRadius, groundCheckLayer);
+        isGround = (collider != null);
     }
 
     public void takeDamage(float dano)
@@ -35,5 +47,16 @@ public class inimoBase : MonoBehaviour
     public float getDano()
     {
         return dano;
+    }
+
+    public bool GroundCheck()
+    {
+        return isGround;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(groundCheckObject.position, groundCheckRadius);
     }
 }

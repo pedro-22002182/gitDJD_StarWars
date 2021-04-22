@@ -21,6 +21,7 @@ public class inimigoMovement : MonoBehaviour
     private Transform target;
     private float distPlayer;
 
+    
 
 
     // Start is called before the first frame update
@@ -33,27 +34,30 @@ public class inimigoMovement : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
 
 
-
-        // METER O GAJO A ANDAR PARA TRAS E FRENTE QUANDO NAO VE INIMGO?
+        //E METER QUE SO ANDA SE TIVER NO CHAO
+        // METER O GAJO A não cair, ou seja meter aquilo no chao á frente player e so movimentar se houver chao
     }
 
-    void FixedUpdate()
-    {
-        target = GameObject.Find("player").transform;
-
-        //enemy follow player between distMax and distMin
-        if(distPlayer < distMaxMov && distPlayer > distMinMov)
-        {
-            followPlayer();
-        }
-    }   
 
     // Update is called once per frame
     void Update()
     {
-        //dist between player and enemy
-        distPlayer = Vector3.Distance(target.position, this.gameObject.transform.position);
-        setDirection();
+        
+        if(GetComponent<inimoBase>().GroundCheck() == true)
+        {
+            target = GameObject.Find("player").transform;
+
+
+            //dist between player and enemy
+            distPlayer = Vector3.Distance(target.position, transform.position);
+            setDirection();
+
+            //enemy follow player between distMax and distMin
+            if(distPlayer < distMaxMov && distPlayer > distMinMov)
+            {
+                followPlayer();
+            }
+        }
     }
 
     private void followPlayer()
