@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class forceMAnagent : MonoBehaviour
 {
-
+    //Variables for held
     private Vector3 startPos;
     private bool isBeingHeld = false;
 
-    //Throw
+    //Variables for throw
     [SerializeField]
+    private float timeForThrow = 0.025f;
+
+    [SerializeField]
+    private float speedThorw = 120;
+
+    private bool isThrow;
     private float timeThrow;
-
-    [SerializeField]
-    private float speedThorw;
-
-    private bool Throw;
-    private float time;
     private Rigidbody2D rb;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Throw = true;
+        isThrow = true;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -32,37 +32,29 @@ public class forceMAnagent : MonoBehaviour
     {
         if(isBeingHeld == true)
         {
-            
-            Vector3 mousePos;
-            mousePos = Input.mousePosition;
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
+            Vector3 mousePos = GetMousePos();
             Vector3 endPos = new Vector3(mousePos.x, mousePos.y, transform.position.z);
 
-            transform.position = Vector3.Lerp(startPos, endPos, 0.85f);
-
-            rb = transform.GetComponent<Rigidbody2D>();
+            transform.position = Vector3.Lerp(startPos, endPos, 0.92f);
         }
 
 
-        if(Throw == false && isBeingHeld == false)
+        if(isThrow == false && isBeingHeld == false)
         { 
-            time += Time.deltaTime;
+            timeThrow += Time.deltaTime;
 
-            if(time > timeThrow)
+            if(timeThrow > timeForThrow)
             {
-                Vector3 mousePos;
-                mousePos = Input.mousePosition;
-                mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
+                Vector3 mousePos = GetMousePos();
                 Vector3 endPos = new Vector3(mousePos.x, mousePos.y, transform.position.z);
-
                 Vector3 direction = (transform.position - endPos).normalized;
+
                 float distSpeed = Vector3.Distance(endPos, transform.position);
                 
                 rb.AddForce(direction * -distSpeed * speedThorw);
-                Throw = true;
-                time = 0;
+
+                isThrow = true;
+                timeThrow = 0;
             }
         }
     }
@@ -72,22 +64,30 @@ public class forceMAnagent : MonoBehaviour
         startPos = transform.position;
         isBeingHeld = true;
         rb.gravityScale = 0;   
-
     }
 
     private void OnMouseUp()
     {
-        rb.gravityScale = 1;  
         isBeingHeld = false;
+        rb.gravityScale = 1;  
     }
 
     private void OnMouseExit()
     {   
-        rb.gravityScale = 1; 
         if(isBeingHeld == true)
         {
             isBeingHeld = false;
-            Throw = false;
+            isThrow = false;
         }
+        rb.gravityScale = 1; 
+    }
+
+    private Vector3 GetMousePos()
+    {
+        Vector3 mousePos;
+        mousePos = Input.mousePosition;
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        return mousePos;
     }
 }
