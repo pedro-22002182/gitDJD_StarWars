@@ -22,6 +22,7 @@ public class inimigoMovement : MonoBehaviour
     private float distPlayer;
 
 
+
     // Start is called before the first frame update
     void Start()
     {   
@@ -30,16 +31,20 @@ public class inimigoMovement : MonoBehaviour
         distMinMov = distAtack;
 
         rb = this.GetComponent<Rigidbody2D>();
+
+
+
+        // METER O GAJO A ANDAR PARA TRAS E FRENTE QUANDO NAO VE INIMGO?
     }
 
     void FixedUpdate()
     {
         target = GameObject.Find("player").transform;
 
-        //enemy move between distMax and distMin
+        //enemy follow player between distMax and distMin
         if(distPlayer < distMaxMov && distPlayer > distMinMov)
         {
-            Move();
+            followPlayer();
         }
     }   
 
@@ -48,14 +53,14 @@ public class inimigoMovement : MonoBehaviour
     {
         //dist between player and enemy
         distPlayer = Vector3.Distance(target.position, this.gameObject.transform.position);
-
         setDirection();
     }
 
-    private void Move()
+    private void followPlayer()
     {
         rb.velocity = new Vector2(direction * speed , rb.velocity.y);
     }
+
 
 
     private void setDirection()
