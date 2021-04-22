@@ -42,16 +42,14 @@ public class inimigoMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if(GetComponent<inimoBase>().GroundCheck() == true)
+        target = GameObject.Find("player").transform;
+        setDirection();
+
+        if(GetComponent<inimoBase>().GroundFrontCheck() == true)
         {
-            target = GameObject.Find("player").transform;
-
-
             //dist between player and enemy
             distPlayer = Vector3.Distance(target.position, transform.position);
-            setDirection();
-
+            
             //enemy follow player between distMax and distMin
             if(distPlayer < distMaxMov && distPlayer > distMinMov)
             {
