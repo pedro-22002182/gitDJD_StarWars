@@ -11,9 +11,6 @@ public class inimoBase : MonoBehaviour
     [SerializeField]
     private float dano = 10;
 
-    private bool isGround;
-    private bool hasGroundFront;
-
     [SerializeField]
     private Transform groundCheckObject;
 
@@ -26,6 +23,10 @@ public class inimoBase : MonoBehaviour
     [SerializeField]
     private LayerMask groundCheckLayer;
 
+    //Propriedades
+    public bool IsGround {get; private set;}
+    public bool IsGroundFront {get; private set;}
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,10 +37,10 @@ public class inimoBase : MonoBehaviour
     void Update()
     {
         Collider2D collider = Physics2D.OverlapCircle(groundCheckObject.position, groundCheckRadius, groundCheckLayer);
-        isGround = (collider != null);
+        IsGround = (collider != null);
 
         Collider2D colliderFront = Physics2D.OverlapCircle(groundCheckFront.position, groundCheckRadius, groundCheckLayer);
-        hasGroundFront = (colliderFront != null);
+        IsGroundFront = (colliderFront != null);
 
     }
 
@@ -50,21 +51,6 @@ public class inimoBase : MonoBehaviour
         {
             vida = 0;
         }
-    }
-
-    public float getDano()
-    {
-        return dano;
-    }
-
-    public bool GroundCheck()
-    {
-        return isGround;
-    }
-
-    public bool GroundFrontCheck()
-    {
-        return hasGroundFront;
     }
 
     private void OnDrawGizmosSelected()

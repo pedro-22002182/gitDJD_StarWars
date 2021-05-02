@@ -9,7 +9,6 @@ public class forceMAnagent : MonoBehaviour
     private bool isBeingHeld = false;
 
     //Variables for throw
-    [SerializeField]
     private float timeForThrow = 0.02f;
 
     [SerializeField]

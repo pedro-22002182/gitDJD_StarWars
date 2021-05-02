@@ -32,10 +32,6 @@ public class inimigoMovement : MonoBehaviour
         distMinMov = distAtack;
 
         rb = this.GetComponent<Rigidbody2D>();
-
-
-        //E METER QUE SO ANDA SE TIVER NO CHAO
-        // METER O GAJO A não cair, ou seja meter aquilo no chao á frente player e so movimentar se houver chao
     }
 
 
@@ -45,7 +41,7 @@ public class inimigoMovement : MonoBehaviour
         target = GameObject.Find("player").transform;
         setDirection();
 
-        if(GetComponent<inimoBase>().GroundFrontCheck() == true)
+        if(GetComponent<inimoBase>().IsGroundFront == true)
         {
             //dist between player and enemy
             distPlayer = Vector3.Distance(target.position, transform.position);

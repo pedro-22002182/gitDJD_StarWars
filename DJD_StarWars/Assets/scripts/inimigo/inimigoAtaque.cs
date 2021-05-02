@@ -36,7 +36,7 @@ public class inimigoAtaque : MonoBehaviour
     void Update()
     {
 
-        if(GetComponent<inimoBase>().GroundCheck() == true)
+        if(GetComponent<inimoBase>().IsGround == true)
         {
             //dist between player and enemy
             float distPlayer = Vector3.Distance(target.position, this.gameObject.transform.position);
@@ -80,5 +80,14 @@ public class inimigoAtaque : MonoBehaviour
         return distAtack;
     }
 
-    
+    void onTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "Player")
+        {
+            //playerBase = col.gameObject.GetComponent
+            //vidaPlayer - dano;
+
+            //e ter uma assim para o tiro?
+        }
+    }
 }
