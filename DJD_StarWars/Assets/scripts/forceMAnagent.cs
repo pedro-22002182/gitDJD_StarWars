@@ -8,11 +8,12 @@ public class forceMAnagent : MonoBehaviour
     private Vector3 startPos;
     private bool isBeingHeld = false;
 
+
     //Variables for throw
-    private float timeForThrow = 0.02f;
+    private float timeForThrow = 0.025f;
 
     [SerializeField]
-    private float speedThorw = 90;
+    private float speedThorw = 110;
 
     private bool isThrow;
     private float timeThrow;
@@ -56,19 +57,19 @@ public class forceMAnagent : MonoBehaviour
                 timeThrow = 0;
             }
         }
-    }
 
-    private void OnMouseDown()
-    {
-        startPos = transform.position;
-        isBeingHeld = true;
-        rb.gravityScale = 0;   
-    }
+        if(Input.GetMouseButtonDown(1))
+        {
+            startPos = transform.position;
+            isBeingHeld = true;
+            rb.gravityScale = 0;   
+        }
 
-    private void OnMouseUp()
-    {
-        isBeingHeld = false;
-        rb.gravityScale = 1;  
+        if(Input.GetMouseButtonUp(1))
+        {
+            isBeingHeld = false;
+            rb.gravityScale = 1; 
+        }
     }
 
     private void OnMouseExit()
@@ -89,4 +90,18 @@ public class forceMAnagent : MonoBehaviour
 
         return mousePos;
     }
+
+
+    /* private void OnMouseDown()
+    {
+        startPos = transform.position;
+        isBeingHeld = true;
+        rb.gravityScale = 0;   
+    }
+
+    private void OnMouseUp()
+    {
+        isBeingHeld = false;
+        rb.gravityScale = 1;  
+    } */
 }

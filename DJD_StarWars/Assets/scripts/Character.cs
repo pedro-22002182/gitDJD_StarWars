@@ -64,7 +64,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(groundCheckObject.position, groundCheckRadius);
