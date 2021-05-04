@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveForward : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
     private Vector3 moveVector;
 
@@ -30,5 +30,24 @@ public class MoveForward : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void Ricochete()
+    {
+        startPos = transform.position;
+        timer = 0;
+        speed *= -1;
+        Debug.Log("oo");
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+    
+        if(collision.gameObject.name == "player")
+        {   
+           // Character character = collision.GetComponent<Character>();
+          //  character.takeDamage(dano);
+            //          Debug.Log("dano");
+        }
     }
 }

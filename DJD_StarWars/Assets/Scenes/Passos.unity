@@ -222,6 +222,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &103271132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 103271133}
+  m_Layer: 0
+  m_Name: atackUpPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &103271133
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103271132}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.219, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1446649445}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &180270963
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,7 +656,7 @@ GameObject:
   m_Component:
   - component: {fileID: 816821712}
   m_Layer: 0
-  m_Name: atackPos
+  m_Name: atackFrontPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -640,7 +670,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 816821711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.219, y: 0, z: 0}
+  m_LocalPosition: {x: 0.474, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1446649445}
@@ -1176,7 +1206,7 @@ GameObject:
   - component: {fileID: 1371309731}
   m_Layer: 0
   m_Name: bullet
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1405,6 +1435,7 @@ Transform:
   m_Children:
   - {fileID: 1209309736}
   - {fileID: 816821712}
+  - {fileID: 103271133}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1433,8 +1464,9 @@ MonoBehaviour:
   maxJumpTime: 0.25
   maxJumps: 2
   jumpGravityStart: 1
-  atackPos: {fileID: 816821712}
-  radiusAtack: 8
+  atackFrontPos: {fileID: 816821712}
+  atackUpPos: {fileID: 103271133}
+  radiusAtack: 15
 --- !u!61 &1446649447
 BoxCollider2D:
   m_ObjectHideFlags: 0

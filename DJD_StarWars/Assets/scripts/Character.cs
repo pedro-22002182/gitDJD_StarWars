@@ -54,16 +54,6 @@ public class Character : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Character character = collision.GetComponent<Character>();
-
-        if(character != null)
-        {
-            character.takeDamage(dano);
-        }
-    }
-
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

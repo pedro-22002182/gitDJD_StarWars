@@ -7,6 +7,7 @@ public class forceMAnagent : MonoBehaviour
     //Variables for held
     private Vector3 startPos;
     private bool isBeingHeld = false;
+    private bool canHeld;
 
 
     //Variables for throw
@@ -24,6 +25,7 @@ public class forceMAnagent : MonoBehaviour
     void Start()
     {
         isThrow = true;
+        canHeld = false;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -58,20 +60,28 @@ public class forceMAnagent : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButtonDown(1))
+        if(canHeld)
         {
-            startPos = transform.position;
-            isBeingHeld = true;
-            rb.gravityScale = 0;   
-        }
+            if(Input.GetMouseButtonDown(1))
+            {
+                startPos = transform.position;
+                isBeingHeld = true;
+                rb.gravityScale = 0;   
+            }
 
-        if(Input.GetMouseButtonUp(1))
-        {
-            isBeingHeld = false;
-            rb.gravityScale = 1; 
+            if(Input.GetMouseButtonUp(1))
+            {
+                isBeingHeld = false;
+                rb.gravityScale = 1; 
+            }
         }
+        
     }
 
+    private void OnMouseEnter()
+    {
+        canHeld = true;
+    }
     private void OnMouseExit()
     {   
         if(isBeingHeld == true)
@@ -80,6 +90,8 @@ public class forceMAnagent : MonoBehaviour
             isThrow = false;
         }
         rb.gravityScale = 1; 
+
+        canHeld = false;
     }
 
     private Vector3 GetMousePos()

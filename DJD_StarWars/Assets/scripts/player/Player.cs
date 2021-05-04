@@ -17,9 +17,12 @@ public class Player : Character
 
     //Atack Variables
     [SerializeField]
-    private Transform       atackPos;
+    private Transform       atackFrontPos;
+    [SerializeField]
+    private Transform       atackUpPos;
     [SerializeField]
     private float       radiusAtack;
+    private Transform       atackPos;
 
     private bool isAtack;
 
@@ -73,14 +76,17 @@ public class Player : Character
             }
         }
 
-
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetKey(KeyCode.W))
         {
-           // if(Input.GetKeyDown("m"))
-           // {
-           //     atackPos.position = new Vector3(0, atackPos.position.x, atackPos.position.z);
-           // }
+            atackPos = atackUpPos;
+        }
+        else
+        {
+            atackPos = atackFrontPos;
+        }
 
+        if(Input.GetMouseButton(0))
+        {
             Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
             CheckCircle(cols);
             isAtack = true;
@@ -113,6 +119,11 @@ public class Player : Character
             if (col.gameObject.CompareTag("enemy"))
             {
                 col.gameObject.GetComponent<Character>().takeDamage(dano);
+            }
+
+            if (col.gameObject.CompareTag("bullet"))
+            {   
+                col.gameObject.GetComponent<Bullet>().Ricochete();
             }
         }
     }

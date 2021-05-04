@@ -116,4 +116,15 @@ public class InimigoComum : Character
         float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
         arm.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+    
+        if(collision.gameObject.name == "player")
+        {   
+            Character character = collision.GetComponent<Character>();
+            character.takeDamage(dano);
+            Debug.Log("dano");
+        }
+    }
 }
