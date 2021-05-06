@@ -4,97 +4,60 @@ using UnityEngine;
 
 public class forceMAnagent : MonoBehaviour
 {
-    //Variables for held
-    private Vector3 startPos;
-    private bool isBeingHeld = false;
-    private bool canHeld;
+    
 
 
     //Variables for throw
+    [SerializeField]
     private float timeForThrow = 0.025f;
 
     [SerializeField]
     private float speedThorw = 110;
 
-    private bool isThrow;
-    private float timeThrow;
-    private Rigidbody2D rb;
 
+    Player player;
+    ManaUiPlayer manaBar;
+
+
+    [SerializeField]
+    private float tempForRecover = 0;
+
+    float tempForce = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        isThrow = true;
-        canHeld = false;
-        rb = GetComponent<Rigidbody2D>();
+        if(player == null)
+        {
+            player = FindObjectOfType<Player>(); 
+        }
+
+        manaBar = FindObjectOfType<ManaUiPlayer>(); 
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public float getTempRecover() => tempForRecover;
+
+    public float getSpeedThorw() => speedThorw;
+
+    public float getTimeForThrow() => timeForThrow;
+
+    public int getCurrentMana() => player.CurrentMana;
+    
+    public void ChangeMana(int value)
     {
-        if(isBeingHeld == true)
+
+        tempForce += Time.deltaTime;
+
+        if(tempForce > 0.02f)
         {
-            Vector3 mousePos = GetMousePos();
-            Vector3 endPos = new Vector3(mousePos.x, mousePos.y, transform.position.z);
-
-            transform.position = Vector3.Lerp(startPos, endPos, 0.92f);
-        }
-
-
-        if(isThrow == false && isBeingHeld == false)
-        { 
-            timeThrow += Time.deltaTime;
-
-            if(timeThrow > timeForThrow)
-            {
-                Vector3 mousePos = GetMousePos();
-                Vector3 endPos = new Vector3(mousePos.x, mousePos.y, transform.position.z);
-                Vector3 direction = (transform.position - endPos).normalized;
-
-                float distSpeed = Vector3.Distance(endPos, transform.position);
-                
-                rb.AddForce(direction * -distSpeed * speedThorw);
-
-                isThrow = true;
-                timeThrow = 0;
-            }
-        }
-
-        if(canHeld)
-        {
-            if(Input.GetMouseButtonDown(1))
-            {
-                startPos = transform.position;
-                isBeingHeld = true;
-                rb.gravityScale = 0;   
-            }
-
-            if(Input.GetMouseButtonUp(1))
-            {
-                isBeingHeld = false;
-                rb.gravityScale = 1; 
-            }
-        }
-        
+            player.CurrentMana += value;
+            manaBar.SetMana(player.CurrentMana);
+            tempForce = 0;
+        } 
     }
 
-    private void OnMouseEnter()
-    {
-        canHeld = true;
-    }
-    private void OnMouseExit()
-    {   
-        if(isBeingHeld == true)
-        {
-            isBeingHeld = false;
-            isThrow = false;
-        }
-        rb.gravityScale = 1; 
-
-        canHeld = false;
-    }
-
-    private Vector3 GetMousePos()
+    public Vector3 GetMousePos()
     {
         Vector3 mousePos;
         mousePos = Input.mousePosition;
@@ -102,18 +65,4 @@ public class forceMAnagent : MonoBehaviour
 
         return mousePos;
     }
-
-
-    /* private void OnMouseDown()
-    {
-        startPos = transform.position;
-        isBeingHeld = true;
-        rb.gravityScale = 0;   
-    }
-
-    private void OnMouseUp()
-    {
-        isBeingHeld = false;
-        rb.gravityScale = 1;  
-    } */
 }

@@ -24,6 +24,14 @@ public class Player : Character
     private float       radiusAtack;
     private Transform       atackPos;
 
+
+    //MANA COntrol
+    private ManaUiPlayer manaBar;
+    [SerializeField]
+    private int maxMana;
+    public int CurrentMana {get; set;}
+
+
     private bool isAtack;
 
     private float       hAxis;
@@ -36,6 +44,11 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
+
+        manaBar = FindObjectOfType<ManaUiPlayer>(); 
+
+        CurrentMana = maxMana;
+        manaBar.SetMaxMana(maxMana);
     }
 
     void FixedUpdate()
