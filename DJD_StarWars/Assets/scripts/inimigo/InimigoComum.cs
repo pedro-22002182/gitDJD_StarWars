@@ -40,8 +40,10 @@ public class InimigoComum : Character
 
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         target = GameObject.Find("player").transform;
         setDirection();
 

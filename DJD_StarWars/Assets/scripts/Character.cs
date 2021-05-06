@@ -6,10 +6,15 @@ public class Character : MonoBehaviour
 {
 
     [SerializeField]
-    protected float vida = 100;
+    protected int vidaMAx = 3;
 
     [SerializeField]
-    protected float dano = 10;
+    protected int dano = 1;
+
+    [SerializeField]
+    protected float  invulnerabilityDuration = 2f;
+    [SerializeField]
+    protected float  blinkerDuration = 0.15f;
 
     [SerializeField]
     protected float       moveSpeed = 150;
@@ -24,13 +29,42 @@ public class Character : MonoBehaviour
     protected LayerMask   groundCheckLayer;
 
     
-    protected Rigidbody2D rb;
-
+    protected Rigidbody2D    rb;
+    protected SpriteRenderer spriteRenderer;
+    protected float          invulnerabilityTimer = 0;
+    protected float          blinkerTimer = 0;
+    protected int vida;
+    public int nHearts => vida;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        vida = vidaMAx;
+    }
+
+    protected virtual void Update()
+    {
+
+        if(invulnerabilityTimer > 0)
+        {
+            invulnerabilityTimer -= Time.deltaTime;
+
+            blinkerTimer -= Time.deltaTime;
+            if(blinkerTimer <= 0)
+            {
+                spriteRenderer.enabled = !spriteRenderer.enabled;
+                blinkerTimer = blinkerDuration;
+            }
+        }
+        else
+        {
+            spriteRenderer.enabled = true;
+            
+        }
+        
     }
 
     protected bool isGround() 
@@ -45,12 +79,21 @@ public class Character : MonoBehaviour
         return (collider != null);
     }
 
-    public void takeDamage(float dano)
+    public void takeDamage(int dano)
     {
+        if(invulnerabilityTimer > 0) return;
+        if(vida <=   0) return;
+
         vida -= dano;
-        if(vida < 0)
+        
+        if(vida <= 0)
         {
-            vida = 0;
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            invulnerabilityTimer = invulnerabilityDuration;
+            blinkerTimer = blinkerDuration;
         }
     }
 

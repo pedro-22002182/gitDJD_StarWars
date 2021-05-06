@@ -44,8 +44,10 @@ public class Player : Character
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+        
         hAxis = Input.GetAxis("Horizontal");
 
         if((isGround()) && (Mathf.Abs(rb.velocity.y) < 0.1f))

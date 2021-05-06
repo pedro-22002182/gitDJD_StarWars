@@ -9,8 +9,13 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     private float speed = 400;
 
+    [SerializeField]
+    private int dano = 1;
+
     float   timer = 0.0f;
     Vector3 startPos;
+
+    private int nRicochete = 0;
 
     void Start()
     {
@@ -34,20 +39,25 @@ public class Bullet : MonoBehaviour
 
     public void Ricochete()
     {
-        startPos = transform.position;
-        timer = 0;
-        speed *= -1;
-        Debug.Log("oo");
+        if(nRicochete == 0)
+        {
+            startPos = transform.position;
+            timer = 0;
+            speed *= Random.Range(-1.2f,-1.6f);
+
+            nRicochete += 1;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
     
-        if(collision.gameObject.name == "player")
+        if(collision.gameObject.name == "player" || collision.gameObject.tag == "enemy")
         {   
-           // Character character = collision.GetComponent<Character>();
-          //  character.takeDamage(dano);
-            //          Debug.Log("dano");
+            Character character = collision.GetComponent<Character>();
+            character.takeDamage(dano);
+
+            Debug.Log("acertou");
         }
     }
 }
