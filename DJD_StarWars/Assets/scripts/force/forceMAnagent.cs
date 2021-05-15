@@ -21,6 +21,7 @@ public class forceMAnagent : MonoBehaviour
 
     [SerializeField]
     private float tempForRecover = 0;
+    private float tempRecover;
 
     float tempForce = 0;
 
@@ -41,7 +42,27 @@ public class forceMAnagent : MonoBehaviour
     }
 
 
-    public float getTempRecover() => tempForRecover;
+    void Update()
+    {
+        if(!(Input.GetMouseButton(1)))
+        {
+            if(tempRecover <= 0 && getCurrentMana() != 100)  //
+            {
+                ChangeMana(+1);
+            }
+            else
+            {
+                tempRecover -= Time.deltaTime;
+            }
+        }
+
+        if(Input.GetMouseButtonDown(1))
+        {
+            tempRecover = tempForRecover;
+        }
+    }
+
+
 
     public float getSpeedThorw() => speedThorw;
 

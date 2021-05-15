@@ -20,7 +20,6 @@ public class forceApply : MonoBehaviour
     private Rigidbody2D rb;
 
 
-    private float tempRecover;
 
     private forceMAnagent fManager;
 
@@ -47,7 +46,6 @@ public class forceApply : MonoBehaviour
         canHeld = false;
         rb = GetComponent<Rigidbody2D>();
 
-        tempRecover = fManager.getTempRecover();
     }
 
     // Update is called once per frame
@@ -128,7 +126,6 @@ public class forceApply : MonoBehaviour
                 isBeingHeld = true;
                 rb.gravityScale = 0;   
 
-                tempRecover = fManager.getTempRecover();
                 fManager.getImageEffect().color = new Color32(115,227,241,51);
             }
 
@@ -141,19 +138,6 @@ public class forceApply : MonoBehaviour
             }
         }
         
-
-        if(!(Input.GetMouseButton(1)))
-        {
-            if(tempRecover <= 0 && fManager.getCurrentMana() != 100)  //
-            {
-                fManager.ChangeMana(+1);
-            }
-            else
-            {
-                tempRecover -= Time.deltaTime;
-            }
-        }
-
     }
 
     private void OnMouseEnter()
