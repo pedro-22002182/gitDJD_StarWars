@@ -29,7 +29,8 @@ public class InimigoComum : Character
 
     //levarDanoQueda por causa forca
     private bool danoQueda;
-    
+
+    private int travar;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -38,7 +39,8 @@ public class InimigoComum : Character
 
         //so, when enemy attacks is stopped
         distMinMov = distAtack;
-        
+
+        travar = 1;
     }
 
 
@@ -53,6 +55,7 @@ public class InimigoComum : Character
         //dist between player and enemy
         distPlayer = Vector3.Distance(target.position, transform.position);
 
+        
         if(isGroundFront())
         {
             //enemy follow player between distMax and distMin
@@ -61,6 +64,18 @@ public class InimigoComum : Character
                 followPlayer();
             }
         }
+        else
+        {
+            if(travar == 0)
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y);
+                travar = 1;
+            }
+        }
+
+        
+        
+
 
         if(isGround() == true)
         {
@@ -85,6 +100,7 @@ public class InimigoComum : Character
     private void followPlayer()
     {
         rb.velocity = new Vector2(directionMove * moveSpeed , rb.velocity.y);
+        travar = 0;
     }
 
 
@@ -110,7 +126,7 @@ public class InimigoComum : Character
     {
         //arm rotation + random rotation in z to do a bullet "imprevissivel"
         Vector3 posRot = arm.rotation.eulerAngles;
-        posRot.z += Random.Range(-15,10);
+        posRot.z += Random.Range(-5,5);
         Quaternion quaternion = Quaternion.Euler(posRot.x, posRot.y, posRot.z);
 
         GameObject firedBullet = Instantiate(bullet, arm.position, quaternion);

@@ -45,6 +45,11 @@ public class Player : Character
     [SerializeField]
     private float boostRasteira;
 
+    [SerializeField]
+    private GameObject espada;
+
+    private GameObject arma;
+
     
     // Start is called before the first frame update
     protected override void Start()
@@ -95,7 +100,7 @@ public class Player : Character
             }
             else
             {
-                rb.gravityScale = 4.0f;
+                rb.gravityScale = 2.5f;
             }
         }
         
@@ -116,12 +121,17 @@ public class Player : Character
         {
             rasteira = true;
             moveSpeed = maxSpeed + boostRasteira;
+
+            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 90);
             
         }
         if(Input.GetKeyUp("s"))
         {
             rasteira = false;
             moveSpeed = maxSpeed;
+
+            transform.position = new Vector3(transform.position.x, transform.position.y + 15, transform.position.z);
+            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 0);
         }
 
         if(rasteira)
@@ -133,34 +143,34 @@ public class Player : Character
             else
             {
                 moveSpeed = 0;
-            }
-            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 90);
+            }            
         }
-        else
-        {
-            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 0);
-        }
+
 
         
 
         //ATAQUE
-        if(Input.GetMouseButton(0) && rb.velocity.x == 0)
-        {
-            Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
-            CheckCircle(cols);
-            isAtack = true;
-        }
-
-
         if(Input.GetMouseButtonDown(0))
         {
             Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
             CheckCircle(cols);
             isAtack = true;
+            arma = Instantiate(espada, atackPos.position , atackPos.rotation);
         }
+
+        if(Input.GetMouseButton(0))
+        {
+            Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
+            CheckCircle(cols);
+            isAtack = true;
+            arma.transform.position = atackPos.position;
+            arma.transform.rotation = atackPos.rotation;
+        }
+
         if(Input.GetMouseButtonUp(0))
         {
             isAtack = false;
+            Destroy(arma.gameObject);
         }
 
 
@@ -190,7 +200,7 @@ public class Player : Character
 
             if (col.gameObject.CompareTag("bullet"))
             {   
-                if(rb.velocity.x > -0.1f && rb.velocity.x < 0.1f)
+                if(rb.velocity.x > -0.4f && rb.velocity.x < 0.4f)
                 {
                     col.gameObject.GetComponent<Bullet>().Ricochete();
                 }

@@ -165,6 +165,7 @@ public class forceApply : MonoBehaviour
         if(isBeingHeld == true)
         {
             fManager.getImageEffect().color = new Color32(115,227,241,0);
+
             isBeingHeld = false;
             isThrow = false;
         }

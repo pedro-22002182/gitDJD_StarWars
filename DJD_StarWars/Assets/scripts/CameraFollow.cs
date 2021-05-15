@@ -10,6 +10,9 @@ public class CameraFollow : MonoBehaviour
     [SerializeField]
     private float followSpeed;
 
+    [SerializeField]
+    private Vector3 offset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +34,6 @@ public class CameraFollow : MonoBehaviour
             currentPos = new Vector3(newPos.x, newPos.y, currentPos.z);
         }
 
-        transform.position = currentPos;
+        transform.position = currentPos + offset;
     }
 }
