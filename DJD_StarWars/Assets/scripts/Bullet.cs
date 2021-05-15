@@ -45,6 +45,9 @@ public class Bullet : MonoBehaviour
             timer = 0;
             speed *= Random.Range(-1.2f,-1.6f);
 
+            moveVector = new Vector3(Random.Range(-1f,1f),0,0) + transform.up;
+            moveVector = moveVector.normalized;
+
             nRicochete += 1;
         }
     }
@@ -56,8 +59,6 @@ public class Bullet : MonoBehaviour
         {   
             Character character = collision.GetComponent<Character>();
             character.takeDamage(dano);
-
-            Debug.Log("acertou");
         }
     }
 }

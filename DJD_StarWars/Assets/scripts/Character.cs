@@ -36,11 +36,14 @@ public class Character : MonoBehaviour
     protected int vida;
     public int nHearts => vida;
 
+    protected Animator animator;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         vida = vidaMAx;
     }
@@ -65,6 +68,7 @@ public class Character : MonoBehaviour
             
         }
         
+        animator.SetFloat("AbsSpeedX", Mathf.Abs(rb.velocity.x));
     }
 
     protected bool isGround() 

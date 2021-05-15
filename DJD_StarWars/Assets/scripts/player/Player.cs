@@ -39,6 +39,12 @@ public class Player : Character
     private float       timeOfJump;
 
 
+    //RASTEIRA
+    float maxSpeed;
+    bool rasteira;
+    [SerializeField]
+    private float boostRasteira;
+
     
     // Start is called before the first frame update
     protected override void Start()
@@ -49,6 +55,8 @@ public class Player : Character
 
         CurrentMana = maxMana;
         manaBar.SetMaxMana(maxMana);
+
+        maxSpeed = moveSpeed;
     }
 
     void FixedUpdate()
@@ -90,6 +98,7 @@ public class Player : Character
                 rb.gravityScale = 4.0f;
             }
         }
+        
 
         if(Input.GetKey(KeyCode.W))
         {
@@ -100,7 +109,50 @@ public class Player : Character
             atackPos = atackFrontPos;
         }
 
-        if(Input.GetMouseButton(0))
+        
+
+        //RASTEIRA
+        if(Input.GetKeyDown("s"))
+        {
+            rasteira = true;
+            moveSpeed = maxSpeed + boostRasteira;
+            
+        }
+        if(Input.GetKeyUp("s"))
+        {
+            rasteira = false;
+            moveSpeed = maxSpeed;
+        }
+
+        if(rasteira)
+        {
+            if(moveSpeed > 0)
+            {
+                moveSpeed -= 0.6f;
+            }
+            else
+            {
+                moveSpeed = 0;
+            }
+            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 90);
+        }
+        else
+        {
+            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 0);
+        }
+
+        
+
+        //ATAQUE
+        if(Input.GetMouseButton(0) && rb.velocity.x == 0)
+        {
+            Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
+            CheckCircle(cols);
+            isAtack = true;
+        }
+
+
+        if(Input.GetMouseButtonDown(0))
         {
             Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
             CheckCircle(cols);
@@ -138,7 +190,10 @@ public class Player : Character
 
             if (col.gameObject.CompareTag("bullet"))
             {   
-                col.gameObject.GetComponent<Bullet>().Ricochete();
+                if(rb.velocity.x > -0.1f && rb.velocity.x < 0.1f)
+                {
+                    col.gameObject.GetComponent<Bullet>().Ricochete();
+                }
             }
         }
     }
@@ -152,5 +207,15 @@ public class Player : Character
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(atackPos.position, radiusAtack);
         }
+    }
+
+    public bool isMove()
+    {
+        if(rb.velocity.x > -0.1f && rb.velocity.x < 0.1f)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

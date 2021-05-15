@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -10,53 +11,36 @@ public class DialogueManager : MonoBehaviour
     private GameObject dBox;
 
     [SerializeField]
-    private Text dText;
+    private TextMeshProUGUI dName;
+
+    [SerializeField]
+    private TextMeshProUGUI dText;
 
     [SerializeField]
     private Image dImage;
-
-    private List<string> dialog;
-    private bool dialogActive;
-    private int index, indexMax;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        dialogActive = false;
-        index = 0;
-
         dBox.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(dialogActive && Input.GetMouseButtonDown(0)){
-
-            index += 1;
-
-            if(index < indexMax)
-            {
-                dText.text = dialog[index];
-            }
-            else
-            {
-                dBox.SetActive(false); 
-                index = 0;
-                dialogActive = false;
-            }
-        }
+        
     }
 
-    public void ShowBox(List<string> dialogue){
+    public void ShowBox(bool acao){
 
-        dBox.SetActive(true);
-        dialogActive = true;
-        
-        dText.text = dialogue[index];
+        dBox.SetActive(acao);
+    }
 
-        indexMax = dialogue.Count;
-        dialog = dialogue;
+    public void updateBox(string nome, string texto, Image image)
+    {
+        dName.text = nome;
+        dText.text = texto;
+        //dImage = image;
     }
 }

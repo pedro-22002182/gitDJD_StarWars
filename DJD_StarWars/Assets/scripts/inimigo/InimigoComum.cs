@@ -27,6 +27,10 @@ public class InimigoComum : Character
     private float distPlayer;
     private float distMinMov;
 
+    //levarDanoQueda por causa forca
+    private bool danoQueda;
+    
+
     // Start is called before the first frame update
     protected override void Start()
     {   
@@ -34,8 +38,7 @@ public class InimigoComum : Character
 
         //so, when enemy attacks is stopped
         distMinMov = distAtack;
-
-        rb = this.GetComponent<Rigidbody2D>();
+        
     }
 
 
@@ -75,6 +78,8 @@ public class InimigoComum : Character
                 }
             }
         }
+
+        
     }
 
     private void followPlayer()
@@ -105,10 +110,12 @@ public class InimigoComum : Character
     {
         //arm rotation + random rotation in z to do a bullet "imprevissivel"
         Vector3 posRot = arm.rotation.eulerAngles;
-        posRot.z += Random.Range(-15,5);
+        posRot.z += Random.Range(-15,10);
         Quaternion quaternion = Quaternion.Euler(posRot.x, posRot.y, posRot.z);
 
         GameObject firedBullet = Instantiate(bullet, arm.position, quaternion);
+
+        animator.SetTrigger("shot");
     }
 
     //update rotation arm
@@ -117,6 +124,12 @@ public class InimigoComum : Character
         Vector2 lookDirection = target.position - this.transform.position;
         float lookAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
         arm.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
+    }
+
+    //por causa Force
+    public void levarDanoQueda()
+    {
+        danoQueda = true;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -128,5 +141,28 @@ public class InimigoComum : Character
             character.takeDamage(dano);
             Debug.Log("dano");
         }
+
+        if(collision.gameObject.layer == LayerMask.NameToLayer("ground") && danoQueda == true)
+        {
+            takeDamage(1);
+            Debug.Log("danoQueda");
+            danoQueda = false;
+        }
+    }
+
+
+    protected override void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, distMaxMov);
+
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, distAtack);
+
     }
 }
