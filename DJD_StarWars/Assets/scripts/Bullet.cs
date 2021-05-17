@@ -55,8 +55,14 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
     
-        if(collision.gameObject.name == "player" || collision.gameObject.tag == "enemy")
+        if(collision.gameObject.name == "player")
         {   
+            Character character = collision.GetComponent<Character>();
+            character.takeDamage(dano);
+        }
+        
+        if(collision.gameObject.tag == "enemy" && nRicochete > 0)
+        {
             Character character = collision.GetComponent<Character>();
             character.takeDamage(dano);
         }

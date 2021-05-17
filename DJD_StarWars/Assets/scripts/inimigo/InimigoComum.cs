@@ -41,6 +41,7 @@ public class InimigoComum : Character
         distMinMov = distAtack;
 
         travar = 1;
+        timerAttack = cooldownTimeAttack/1.3f;
     }
 
 
