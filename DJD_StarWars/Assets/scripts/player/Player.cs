@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;
+
 public class Player : Character
 {
 
@@ -228,4 +230,11 @@ public class Player : Character
 
         return true;
     }
+
+    protected override void onDeath()
+    {
+        base.onDeath();
+        SceneManager.LoadScene("menu");
+    }
+    
 }

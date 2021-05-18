@@ -92,7 +92,7 @@ public class Character : MonoBehaviour
         
         if(vida <= 0)
         {
-            Destroy(this.gameObject);
+            onDeath();
         }
         else
         {
@@ -113,4 +113,10 @@ public class Character : MonoBehaviour
         }
     }
     
+
+
+    protected virtual void onDeath()
+    {
+        Destroy(this.gameObject);
+    }
 }
