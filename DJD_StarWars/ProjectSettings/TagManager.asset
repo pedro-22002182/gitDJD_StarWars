@@ -6,6 +6,7 @@ TagManager:
   tags:
   - enemy
   - bullet
+  - door
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - 
   - ground
-  - 
-  - 
+  - door
+  - sabre
   - 
   - 
   - 

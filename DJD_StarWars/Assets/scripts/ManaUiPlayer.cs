@@ -25,12 +25,12 @@ public class ManaUiPlayer : MonoBehaviour
         }
     }
 
-    public void SetMaxMana(int mana)
+    public void SetMaxMana(float mana)
     {
         slider.maxValue = mana;
         slider.value = mana;
     }
-    public void SetMana(int mana)
+    public void SetMana(float mana)
     {
         slider.value = mana;
     }

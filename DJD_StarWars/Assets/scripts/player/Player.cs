@@ -31,10 +31,15 @@ public class Player : Character
     private ManaUiPlayer manaBar;
     [SerializeField]
     private int maxMana;
-    public int CurrentMana {get; set;}
+    public float CurrentMana {get; set;}
 
-
+    [SerializeField]
+    private bool canAtack; //se tem o sabre ou nao
     private bool isAtack;
+
+    [SerializeField]
+    private float tempMaxAtackMana; //se tem o sabre ou nao
+    private float tempAtack;
 
     private float       hAxis;
     private int         nJumps;
@@ -52,6 +57,16 @@ public class Player : Character
 
     private GameObject arma;
 
+    private forceMAnagent managerForce;
+
+    private float tempImovel;
+
+    //variavel que é true quando o boss faz força no player
+    public bool DamageForce {get; set;}
+
+
+    //pontoSpawn
+    Transform safeSpwanPoint;
     
     // Start is called before the first frame update
     protected override void Start()
@@ -59,16 +74,38 @@ public class Player : Character
         base.Start();
 
         manaBar = FindObjectOfType<ManaUiPlayer>(); 
+        managerForce = FindObjectOfType<forceMAnagent>(); 
 
         CurrentMana = maxMana;
         manaBar.SetMaxMana(maxMana);
 
         maxSpeed = moveSpeed;
+
+
+        SafeSpawnPoint ssp = FindObjectOfType<SafeSpawnPoint>(); 
+        if (ssp) safeSpwanPoint = ssp.transform;
+        else
+        {
+            GameObject go = new GameObject();
+            go.name = "SafeSpawnPoint";
+            go.AddComponent<SafeSpawnPoint>();
+
+            safeSpwanPoint = go.transform;
+        }
     }
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector2(hAxis * moveSpeed, rb.velocity.y);
+        if(DamageForce == false)
+        {
+            rb.velocity = new Vector2(hAxis * moveSpeed, rb.velocity.y);
+
+            if(onForeground())
+            {
+                safeSpwanPoint.position = transform.position;
+            }
+        }
+        
     }
 
     // Update is called once per frame
@@ -83,7 +120,7 @@ public class Player : Character
             nJumps = maxJumps;
         }
 
-        if(Input.GetButtonDown("Jump") && nJumps > 0)
+        if(Input.GetButtonDown("Jump") && nJumps > 0 && isGround())
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
             nJumps -= 1;
@@ -119,7 +156,7 @@ public class Player : Character
         
 
         //RASTEIRA
-        if(Input.GetKeyDown("s"))
+        if(Input.GetKeyDown("s") && DamageForce == false)
         {
             rasteira = true;
             moveSpeed = maxSpeed + boostRasteira;
@@ -149,10 +186,9 @@ public class Player : Character
         }
 
 
-        
-
+    
         //ATAQUE
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && canAtack && DamageForce == false)
         {
             Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
             CheckCircle(cols);
@@ -160,19 +196,39 @@ public class Player : Character
             arma = Instantiate(espada, atackPos.position , atackPos.rotation);
         }
 
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButton(0) && canAtack && DamageForce == false)
         {
-            Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
-            CheckCircle(cols);
-            isAtack = true;
-            arma.transform.position = atackPos.position;
-            arma.transform.rotation = atackPos.rotation;
+            if(CurrentMana > 0)
+            {
+                Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
+                CheckCircle(cols);
+                isAtack = true;
+                arma.transform.position = atackPos.position;
+                arma.transform.rotation = atackPos.rotation;
+
+                tempAtack += Time.deltaTime;
+
+                if(tempAtack >= tempMaxAtackMana)
+                {
+                    managerForce.ChangeMana(-1.1f);
+                }
+            }
+            else
+            {
+                tempAtack = 0;
+                isAtack = false;
+                Destroy(arma.gameObject);
+            }
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0) && canAtack)
         {
-            isAtack = false;
-            Destroy(arma.gameObject);
+            if(arma.gameObject != null)
+            {
+                tempAtack = 0;
+                isAtack = false;
+                Destroy(arma.gameObject);
+            }
         }
 
 
@@ -189,6 +245,25 @@ public class Player : Character
             currentRotation.y = 0;
             transform.rotation = Quaternion.Euler(currentRotation);
         }
+
+
+        if(tempImovel > 0)
+        {
+            rb.velocity = new Vector3(0,0,0);
+            tempImovel -= Time.deltaTime;
+        }
+
+
+        //sofrer forca boss
+        if(DamageForce == true)
+        {
+            rb.gravityScale = 0;
+        }
+        else
+        {
+            rb.gravityScale = 2.5f;
+        }
+
     }
 
     private void CheckCircle(Collider2D[] cols)
@@ -207,7 +282,24 @@ public class Player : Character
                     col.gameObject.GetComponent<Bullet>().Ricochete();
                 }
             }
+
+            if (col.gameObject.CompareTag("door"))
+            {   
+                //ativar animacao e dps destruir
+                Destroy(col.gameObject);
+                //cinemachineShake.Instance.ShakeCamera(100, 0.1f);
+            }
+
+            if(col.gameObject.CompareTag("boss"))
+            {
+                col.gameObject.GetComponent<inimigoBoss>().checkDanoEspada(dano);
+            }
         }
+    }
+
+    public void GetSabre()
+    {
+        canAtack = true;
     }
 
     protected override void OnDrawGizmosSelected()
@@ -229,6 +321,32 @@ public class Player : Character
         }
 
         return true;
+    }
+
+
+    protected bool onForeground() 
+    {
+        Collider2D collider = Physics2D.OverlapCircle(groundCheckObject.position, groundCheckRadius, groundCheckLayer);
+
+        if(collider != null)
+        {
+            return (collider.name == "ForeGround");
+        }
+
+        return false;
+    }
+
+    public void setImovel(float temp)
+    {
+        tempImovel = temp;
+    }
+
+    public void GotoSafe()
+    {
+        if(vida > 0)
+        {
+            transform.position = safeSpwanPoint.position;
+        }   
     }
 
     protected override void onDeath()

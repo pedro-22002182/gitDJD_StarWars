@@ -24,7 +24,7 @@ public class Character : MonoBehaviour
     [SerializeField]
     private Transform groundCheckFront;
     [SerializeField]
-    private float       groundCheckRadius = 3.0f;
+    protected float       groundCheckRadius = 3.0f;
     [SerializeField]
     protected LayerMask   groundCheckLayer;
 
@@ -99,6 +99,12 @@ public class Character : MonoBehaviour
             invulnerabilityTimer = invulnerabilityDuration;
             blinkerTimer = blinkerDuration;
         }
+    }
+
+
+    public int getVidaMax()
+    {
+        return vidaMAx;
     }
 
     protected virtual void OnDrawGizmosSelected()

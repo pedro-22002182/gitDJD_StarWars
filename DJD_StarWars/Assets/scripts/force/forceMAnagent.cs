@@ -44,7 +44,7 @@ public class forceMAnagent : MonoBehaviour
 
     void Update()
     {
-        if(!(Input.GetMouseButton(1)))
+        if(!(Input.GetMouseButton(1)) && !(Input.GetMouseButton(0)))
         {
             if(tempRecover <= 0 && getCurrentMana() != 100)  //
             {
@@ -55,8 +55,7 @@ public class forceMAnagent : MonoBehaviour
                 tempRecover -= Time.deltaTime;
             }
         }
-
-        if(Input.GetMouseButtonDown(1))
+        else
         {
             tempRecover = tempForRecover;
         }
@@ -68,11 +67,11 @@ public class forceMAnagent : MonoBehaviour
 
     public float getTimeForThrow() => timeForThrow;
 
-    public int getCurrentMana() => player.CurrentMana;
+    public float getCurrentMana() => player.CurrentMana;
 
     public Image getImageEffect() => image;
     
-    public void ChangeMana(int value)
+    public void ChangeMana(float value)
     {
         tempForce += Time.deltaTime;
 
