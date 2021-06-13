@@ -34,12 +34,14 @@ public class pauseControl : MonoBehaviour
 
     public void RecomecarNivel()
     {
+        PlayerPrefs.SetInt("mortes", PlayerPrefs.GetInt("mortesAntigas"));
         Time.timeScale = 1;
         GameObject.Find("LevelLoader").GetComponent<LevelLoader>().LoadNextLevel(SceneManager.GetActiveScene().name);
     }
 
     public void menuNiveis()
     {
+        PlayerPrefs.SetInt("mortes", PlayerPrefs.GetInt("mortesAntigas"));
         Time.timeScale = 1;
         GameObject.Find("LevelLoader").GetComponent<LevelLoader>().LoadNextLevel("niveis");
     }
