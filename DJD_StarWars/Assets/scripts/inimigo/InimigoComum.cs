@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class InimigoComum : Character
 {
-
-    //target = player
-    private Transform target;
     //Dists Movement
     [SerializeField]
     private float distMaxMov;
-    
     
     [SerializeField]
     private float cooldownTimeAttack = 1.2f; 
@@ -22,22 +18,28 @@ public class InimigoComum : Character
     [SerializeField]
     private Transform arm;
 
+    //jogador
+    private Transform target;
 
     private int directionMove = -1; //left movement
     private float distPlayer;
     private float distMinMov;
+    private int travar;
 
     //levarDanoQueda por causa forca
     private bool danoQueda;
 
-    private int travar;
+    //Sounds
+    [SerializeField]
+    private AudioSource laserSound;
+
 
     // Start is called before the first frame update
     protected override void Start()
     {   
         base.Start();
 
-        //so, when enemy attacks is stopped
+        //when enemy attacks is stopped
         distMinMov = distAtack;
 
         travar = 1;
@@ -51,19 +53,15 @@ public class InimigoComum : Character
         base.Update();
 
         target = GameObject.Find("player").transform;
-        setDirection();
-
-        //dist between player and enemy
         distPlayer = Vector3.Distance(target.position, transform.position);
 
+        setDirection();
         
         if(isGroundFront())
         {
             //enemy follow player between distMax and distMin
             if(distPlayer < distMaxMov && distPlayer > distMinMov)
-            {
                 followPlayer();
-            }
         }
         else
         {
@@ -76,11 +74,8 @@ public class InimigoComum : Character
 
         
         
-
-
         if(isGround() == true)
         {
-
             //if dist is short than distAtack 
             if(distPlayer <= distAtack)
             {
@@ -107,7 +102,6 @@ public class InimigoComum : Character
 
     private void setDirection()
     {
-        
         if(target.position.x < transform.position.x)
         {
             directionMove = -1;
@@ -133,6 +127,10 @@ public class InimigoComum : Character
         GameObject firedBullet = Instantiate(bullet, arm.position, quaternion);
 
         animator.SetTrigger("shot");
+
+        laserSound.pitch = Random.Range(0.8f, 1.2f);
+        laserSound.volume = Random.Range(0.7f, 1f);
+        laserSound.Play();
     }
 
     //update rotation arm
@@ -144,14 +142,11 @@ public class InimigoComum : Character
     }
 
     //por causa Force
-    public void levarDanoQueda()
-    {
-        danoQueda = true;
-    }
+    public void levarDanoQueda() => danoQueda = true;
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-    
         if(collision.gameObject.name == "player")
         {   
             Character character = collision.GetComponent<Character>();
@@ -165,6 +160,19 @@ public class InimigoComum : Character
             Debug.Log("danoQueda");
             danoQueda = false;
         }
+
+        if(collision.gameObject.tag == "caixa" && collision.transform.position.y > transform.position.y)
+        {   
+            takeDamage(1);
+            Debug.Log("danoCaixa");
+        }
+    }
+
+    protected override void onDeath()
+    {
+        PlayerPrefs.SetInt("mortes", PlayerPrefs.GetInt("mortes") + 1);
+        GameObject.Find("Global Volume").GetComponent<PostDark>().MaisUmaMorte();
+        base.onDeath();
     }
 
 
@@ -172,14 +180,10 @@ public class InimigoComum : Character
     {
         base.OnDrawGizmosSelected();
 
-
-
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, distMaxMov);
 
-
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, distAtack);
-
     }
 }

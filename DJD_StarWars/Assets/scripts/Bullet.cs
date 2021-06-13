@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Vector3 moveVector;
-
     [SerializeField]
     private float speed = 400;
 
     [SerializeField]
     private int dano = 1;
 
+    private Vector3 moveVector;
+    private Vector3 startPos;
     float   timer = 0.0f;
-    Vector3 startPos;
-
     private int nRicochete = 0;
 
     void Start()
@@ -30,11 +28,6 @@ public class Bullet : MonoBehaviour
     {
         timer += Time.fixedDeltaTime;
         transform.position = startPos + moveVector * speed * timer;
-    }
-
-    void Update()
-    {
-        
     }
 
     public void Ricochete()
@@ -54,7 +47,6 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-    
         if(collision.gameObject.name == "player")
         {   
             Character character = collision.GetComponent<Character>();

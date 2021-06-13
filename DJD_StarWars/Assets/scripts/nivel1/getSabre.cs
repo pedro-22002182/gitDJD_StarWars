@@ -23,6 +23,7 @@ public class getSabre : MonoBehaviour
         {   
             Player character = collision.GetComponent<Player>();
             character.GetSabre();
+            FindObjectOfType<DialogueManager>().ShowBox(false);
             Destroy(this.gameObject);
         }
     }

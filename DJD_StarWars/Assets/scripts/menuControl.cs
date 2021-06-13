@@ -5,21 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class menuControl : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void StartGame()
     {
-        SceneManager.LoadScene("GameScene");
+        //GameObject.Find("LevelLoader").GetComponent<LevelLoader>().LoadNextLevel("niveis");
+    }
+
+    public void NewGame()
+    {
+        PlayerPrefs.SetInt("nivel", 1);
+        PlayerPrefs.SetInt("mortes", 0);
+        PlayerPrefs.SetInt("mortesAntigas", 0);
+        //StartGame();
     }
 
     public void Quit()

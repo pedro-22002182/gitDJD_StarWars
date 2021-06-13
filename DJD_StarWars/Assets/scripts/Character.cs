@@ -38,6 +38,14 @@ public class Character : MonoBehaviour
 
     protected Animator animator;
 
+    //Sons
+    [SerializeField]
+    private AudioSource hitSound;
+
+    [SerializeField]
+    private AudioClip dieSound;
+
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -98,9 +106,13 @@ public class Character : MonoBehaviour
         {
             invulnerabilityTimer = invulnerabilityDuration;
             blinkerTimer = blinkerDuration;
+
+
+            hitSound.pitch = Random.Range(0.8f, 1.2f);
+            hitSound.volume = Random.Range(0.7f, 1f);
+            hitSound.Play();
         }
     }
-
 
     public int getVidaMax()
     {
@@ -118,11 +130,10 @@ public class Character : MonoBehaviour
             Gizmos.DrawSphere(groundCheckFront.position, groundCheckRadius);
         }
     }
-    
-
 
     protected virtual void onDeath()
     {
+        SoundManager.instance.PlaySound(dieSound, Random.Range(0.7f, 1f), Random.Range(0.8f, 1.2f));
         Destroy(this.gameObject);
     }
 }

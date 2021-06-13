@@ -5,14 +5,14 @@ using UnityEngine;
 public class inimigoBoss : Character
 {
     private GameObject target;
-    private Transform targetPosInicial;
+    private Vector3 targetPosInicial;
 
     private bool ativarBoss;
     [SerializeField]
     private float distAtivar;
     private float distPlayer;
-
-
+    [SerializeField]
+    private Dialogue dialogue;
 
     private ModoBoss modoBoss;
     private enum ModoBoss
@@ -46,6 +46,22 @@ public class inimigoBoss : Character
     
     private float tempForca;
 
+    [SerializeField]
+    private Transform spawnCaixas;
+
+    [SerializeField]
+    private GameObject caixa;
+    private int numSpawnsCaixas;
+
+    [SerializeField]
+    private GameObject vidaBossInterface;
+
+    //Sounds
+    [SerializeField]
+    private AudioSource forceSound;
+
+    [SerializeField]
+    private AudioSource ataqueSound;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -53,7 +69,7 @@ public class inimigoBoss : Character
         base.Start();
 
         modoBoss = ModoBoss.repouso;
-        tempRepouso = maxTempRepouso;
+        tempRepouso = maxTempRepouso/3;
 
         directionMove = -1; //começa por ir para esquerda
     }
@@ -68,13 +84,14 @@ public class inimigoBoss : Character
 
         distPlayer = Vector3.Distance(target.transform.position, transform.position);
 
-        if(distAtivar <= distPlayer)
-            ativarBoss = true;
+        if(distAtivar >= distPlayer)
+            dialogue.ativarDialogo();
+            
 
-
-
-        if(ativarBoss)
+        if(dialogue.checkAcabou())
         {
+            vidaBossInterface.SetActive(true);
+
             if(modoBoss == ModoBoss.repouso)
             {
                 if(tempRepouso > 0)
@@ -91,29 +108,68 @@ public class inimigoBoss : Character
             {
                 ataqueEspada();
 
+                if(!(ataqueSound.isPlaying))
+                {
+                    ataqueSound.pitch = Random.Range(0.95f, 1.1f);
+                    ataqueSound.volume = Random.Range(0.1f, 0.15f);
+                    ataqueSound.Play();
+                }
+
                 if(transform.position.x <= posicaoInicial.position.x && tocouParede == true && directionMove == -1)
                 {
+                    ataqueSound.Stop();
                     getModoAleatorio(Random.Range(0,5));
                 }
             }
 
             else if(modoBoss == ModoBoss.ataqueForca)
             {
-                //mete gajo para cima e leva dano quando player atira com caixa
-
-                if(tempForca > 0)
+                //aproxima dele, mete gajo para cima e leva dano quando player atira com caixa
+                if(distPlayer < 200)
                 {
-                    tempForca -= Time.deltaTime;
+                    if(tempForca > 0)
+                    {
+                        tempForca -= Time.deltaTime;
 
-                    Vector3 posFinalTarget = new Vector3(targetPosInicial.position.x, targetPosInicial.position.y + 5, targetPosInicial.position.z);
-                    target.transform.position = Vector3.Lerp(targetPosInicial.position, posFinalTarget, moveSpeed);
-                    
+                        target.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
+
+                        Vector3 posFinalTarget = new Vector3(targetPosInicial.x, targetPosInicial.y + 50, targetPosInicial.z);
+                        target.transform.position = Vector3.Lerp(targetPosInicial, posFinalTarget, moveSpeed);
+
+                        if(numSpawnsCaixas > 0)
+                        {
+                            SpawnCaixa();
+                        }
+
+                        if(!(forceSound.isPlaying))
+                        {
+                            forceSound.pitch = Random.Range(0.8f, 1.1f);
+                            forceSound.volume = 1;
+                            forceSound.Play();
+                        }
+                    }
+                    else
+                    {
+                        target.GetComponent<Player>().DamageForce = false;
+                        target.GetComponent<Player>().takeDamage(dano);
+
+                        forceSound.Stop();
+                        getModoAleatorio(Random.Range(0,5));
+                        animator.SetBool("forca", false);
+                    }
+
+                    getRotation();
                 }
                 else
                 {
-                    target.GetComponent<Player>().DamageForce = false;
-                    getModoAleatorio(Random.Range(0,5));
+                    if(transform.position.x > target.transform.position.x)
+                        directionMove = -1;
+                    else
+                        directionMove = 1;
+
+                    rb.velocity = new Vector2(directionMove * moveSpeed , rb.velocity.y);
                 }
+                
             }
 
         }
@@ -125,6 +181,23 @@ public class inimigoBoss : Character
         rb.velocity = new Vector2(directionMove * moveSpeed , rb.velocity.y);
     }
 
+
+    private void getRotation()
+    {
+        //FLIP Player
+        if(transform.position.x > target.transform.position.x)
+        {
+            Vector3 currentRotation = transform.rotation.eulerAngles;
+            currentRotation.y = 180;
+            transform.rotation = Quaternion.Euler(currentRotation);
+        }
+        else
+        {
+            Vector3 currentRotation = transform.rotation.eulerAngles;
+            currentRotation.y = 0;
+            transform.rotation = Quaternion.Euler(currentRotation);
+        }
+    }
 
     private void getModoAleatorio(int index)
     {
@@ -140,7 +213,7 @@ public class inimigoBoss : Character
             }
             else
             {
-                tempRepouso = maxTempRepouso;
+                tempRepouso = (maxTempRepouso/15) * nHearts;
                 modoBoss = ModoBoss.repouso;
             }
         }
@@ -149,17 +222,23 @@ public class inimigoBoss : Character
         {
             if(modoBoss == ModoBoss.repouso)
             {
-                targetPosInicial = target.transform;
+                targetPosInicial = target.transform.position;
                 tempForca = maxTempForca;
                 target.GetComponent<Player>().DamageForce = true;
+
+                numSpawnsCaixas = 1; //Random.Range(1,3);
                 modoBoss = ModoBoss.ataqueForca;
+
+                animator.SetBool("forca", true);
             }
             else
             {
-                tempRepouso = maxTempRepouso;
+                tempRepouso = (maxTempRepouso/15) * nHearts;
                 modoBoss = ModoBoss.repouso;
             }
         }
+
+        Debug.Log(modoBoss);
     }
 
 
@@ -167,9 +246,18 @@ public class inimigoBoss : Character
     public void checkDanoEspada(int dano)
     {
         if(modoBoss == ModoBoss.repouso)
-        {
             takeDamage(dano);
-        }
+    }
+
+    private void SpawnCaixa()
+    {
+
+        Vector3 pos = new Vector3(target.transform.position.x + Random.Range(-35,5), spawnCaixas.position.y,spawnCaixas.position.z);
+
+        GameObject gb = Instantiate(caixa, pos, Quaternion.identity);
+        gb.transform.localScale = new Vector3(Random.Range(0.9f,1.2f),Random.Range(0.9f,1.2f),Random.Range(0.9f,1.2f));
+        
+        numSpawnsCaixas -= 1;
     }
 
 
@@ -182,22 +270,61 @@ public class inimigoBoss : Character
             character.takeDamage(dano);
         }
 
-        if(collision.gameObject.name == "caixa" && modoBoss == ModoBoss.ataqueForca)
+        if(collision.gameObject.tag == "caixa" && modoBoss == ModoBoss.ataqueForca)
         {
             takeDamage(1);
             target.GetComponent<Player>().DamageForce = false;
+            forceSound.Stop();
+
             getModoAleatorio(Random.Range(0,5));
+            Destroy(collision.gameObject);
+
+            animator.SetBool("forca", false);
         }
+        else if(collision.gameObject.tag == "caixa")
+        {
+            Destroy(collision.gameObject);
+        }
+    }
+
+    protected override void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, distAtivar);
     }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if(col.gameObject.name == "parede")
+        if(col.gameObject.name == "parede" || col.gameObject.name == "player")
         {
             directionMove *= -1;
             tocouParede = true;
-        }
 
-        
+            //FLIP Player
+            if(directionMove == -1)
+            {
+                Vector3 currentRotation = transform.rotation.eulerAngles;
+                currentRotation.y = 180;
+                transform.rotation = Quaternion.Euler(currentRotation);
+            }
+            else if(directionMove == 1)
+            {
+                Vector3 currentRotation = transform.rotation.eulerAngles;
+                currentRotation.y = 0;
+                transform.rotation = Quaternion.Euler(currentRotation);
+            }
+            
+        }
     }
+
+    protected override void onDeath()
+    {
+        Destroy(this.gameObject);
+        GameObject.Find("Fim").GetComponent<Final>().comecarFim = true;
+        base.onDeath();
+    }
+
+    
 }

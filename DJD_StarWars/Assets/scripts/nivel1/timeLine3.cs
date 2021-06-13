@@ -37,7 +37,7 @@ public class timeLine3 : MonoBehaviour
         if(conversa.checkAcabou() && umaVez == 0)
         {
             cenamatic.SetActive(true);
-            player.setImovel(tempImovel);
+            GameObject.Find("Music").GetComponent<controlMusicBack>().TurnFightSoung();
             umaVez += 1;
         }
     }

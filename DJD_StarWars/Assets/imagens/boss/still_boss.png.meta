@@ -1,0 +1,478 @@
+fileFormatVersion: 2
+guid: bee0bc6392e6445468db750c78cdc38e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5600181603963909382
+    second: still_boss_0
+  - first:
+      213: -9067146716088154177
+    second: still_boss_1
+  - first:
+      213: 6060496692515829224
+    second: still_boss_2
+  - first:
+      213: -58449434363258952
+    second: still_boss_3
+  - first:
+      213: 4803071871353090242
+    second: still_boss_4
+  - first:
+      213: -8055268921329119337
+    second: still_boss_5
+  - first:
+      213: -9161876311917473646
+    second: still_boss_6
+  - first:
+      213: 8537761099025162512
+    second: still_boss_7
+  - first:
+      213: -1984475206594565825
+    second: still_boss_8
+  - first:
+      213: 467199924066948169
+    second: still_boss_9
+  - first:
+      213: -4674374172603785853
+    second: still_boss_10
+  - first:
+      213: 6016374317270999484
+    second: still_boss_11
+  - first:
+      213: -5300691486672813613
+    second: still_boss_12
+  - first:
+      213: -2509221387704324981
+    second: still_boss_13
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: still_boss_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.49999997, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60532fd6f77d7bd40800000000000000
+      internalID: 5600181603963909382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_1
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb7473df9160b2280800000000000000
+      internalID: -9067146716088154177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_2
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e5f5d7c1a53b1450800000000000000
+      internalID: 6060496692515829224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_3
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b794739c88503ff0800000000000000
+      internalID: -58449434363258952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_4
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c0fba25b60f7a240800000000000000
+      internalID: 4803071871353090242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_5
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79f0fed389fe53090800000000000000
+      internalID: -8055268921329119337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_6
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 63
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 290d718390a7ad080800000000000000
+      internalID: -9161876311917473646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.49999997, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0112b8c0c783c7670800000000000000
+      internalID: 8537761099025162512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_8
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f396c55505ab574e0800000000000000
+      internalID: -1984475206594565825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_9
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94499190bd3db7600800000000000000
+      internalID: 467199924066948169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_10
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38dd0b6b479412fb0800000000000000
+      internalID: -4674374172603785853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_11
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb1a8b0c0947e7350800000000000000
+      internalID: 6016374317270999484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_12
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d10ee85d292076b0800000000000000
+      internalID: -5300691486672813613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: still_boss_13
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 3
+        width: 60
+        height: 56
+      alignment: 9
+      pivot: {x: 0.5, y: 0.447}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8c221b31747d2dd0800000000000000
+      internalID: -2509221387704324981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

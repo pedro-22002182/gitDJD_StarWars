@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
-
     [SerializeField]
     private float       jumpSpeed = 100;
     [SerializeField]
@@ -16,25 +15,24 @@ public class Player : Character
     [SerializeField]
     private int         jumpGravityStart = 1;  
 
-
     //Atack Variables
     [SerializeField]
     private Transform       atackFrontPos;
-    [SerializeField]
-    private Transform       atackUpPos;
+
     [SerializeField]
     private float       radiusAtack;
-    private Transform       atackPos;
+    private float tempForDamageAtack;
 
 
     //MANA COntrol
     private ManaUiPlayer manaBar;
     [SerializeField]
-    private int maxMana;
+    public int MaxMana {get; set;}
     public float CurrentMana {get; set;}
 
     [SerializeField]
-    private bool canAtack; //se tem o sabre ou nao
+    private bool haveSabre; //se tem o sabre 
+    private bool canAtack; //se tem o sabre ativo ou nao
     private bool isAtack;
 
     [SerializeField]
@@ -49,17 +47,12 @@ public class Player : Character
     //RASTEIRA
     float maxSpeed;
     bool rasteira;
+
+    
     [SerializeField]
     private float boostRasteira;
 
-    [SerializeField]
-    private GameObject espada;
-
-    private GameObject arma;
-
-    private forceMAnagent managerForce;
-
-    private float tempImovel;
+    private ForceManagent managerForce;
 
     //variavel que é true quando o boss faz força no player
     public bool DamageForce {get; set;}
@@ -67,6 +60,24 @@ public class Player : Character
 
     //pontoSpawn
     Transform safeSpwanPoint;
+
+
+    //Sounds
+    [SerializeField]
+    private AudioSource dashSound;
+    [SerializeField]
+    private AudioSource jumpSound;
+    [SerializeField]
+    private AudioSource lightSaber;
+    [SerializeField]
+    private AudioSource lightSaberOff;
+    [SerializeField]
+    private AudioSource lightSaberAtack;
+    [SerializeField]
+    private AudioSource lightSaberDefend;
+    [SerializeField]
+    private AudioClip destruirSound;
+
     
     // Start is called before the first frame update
     protected override void Start()
@@ -74,10 +85,11 @@ public class Player : Character
         base.Start();
 
         manaBar = FindObjectOfType<ManaUiPlayer>(); 
-        managerForce = FindObjectOfType<forceMAnagent>(); 
+        managerForce = FindObjectOfType<ForceManagent>(); 
 
-        CurrentMana = maxMana;
-        manaBar.SetMaxMana(maxMana);
+        MaxMana = 100;
+        CurrentMana = MaxMana;
+        manaBar.SetMaxMana(MaxMana);
 
         maxSpeed = moveSpeed;
 
@@ -91,6 +103,11 @@ public class Player : Character
             go.AddComponent<SafeSpawnPoint>();
 
             safeSpwanPoint = go.transform;
+        }
+
+        if(haveSabre)
+        {
+            canAtack = true;
         }
     }
 
@@ -110,160 +127,205 @@ public class Player : Character
 
     // Update is called once per frame
     protected override void Update()
-    {
-        base.Update();
-        
-        hAxis = Input.GetAxis("Horizontal");
-
-        if((isGround()) && (Mathf.Abs(rb.velocity.y) < 0.1f))
+    {   
+        Debug.Log(PlayerPrefs.GetInt("mortes"));
+        //para a luta com o boss
+        if(DamageForce == false)
         {
-            nJumps = maxJumps;
-        }
-
-        if(Input.GetButtonDown("Jump") && nJumps > 0 && isGround())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-            nJumps -= 1;
-
-            rb.gravityScale = jumpGravityStart; 
+            base.Update();
             
-            timeOfJump = Time.time; 
-        }
-        else
-        {
-            float elapsedTimeSinceJump = Time.time - timeOfJump;
+            hAxis = Input.GetAxis("Horizontal");
 
-            if(Input.GetButton("Jump") && (elapsedTimeSinceJump < maxJumpTime))
+            if((isGround()) && (Mathf.Abs(rb.velocity.y) < 0.1f))
             {
-                rb.gravityScale = jumpGravityStart;
+                nJumps = maxJumps;
+            }
+
+            if((Input.GetButtonDown("Jump") || Input.GetKeyDown("w"))&& nJumps > 0)  //isGround()
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+                nJumps -= 1;
+
+                rb.gravityScale = jumpGravityStart; 
+                
+                timeOfJump = Time.time; 
+
+                jumpSound.pitch = Random.Range(0.6f, 0.9f);
+                jumpSound.volume = Random.Range(0.45f, 0.75f);
+                jumpSound.Play();
             }
             else
             {
-                rb.gravityScale = 2.5f;
-            }
-        }
-        
+                float elapsedTimeSinceJump = Time.time - timeOfJump;
 
-        if(Input.GetKey(KeyCode.W))
-        {
-            atackPos = atackUpPos;
-        }
-        else
-        {
-            atackPos = atackFrontPos;
-        }
-
-        
-
-        //RASTEIRA
-        if(Input.GetKeyDown("s") && DamageForce == false)
-        {
-            rasteira = true;
-            moveSpeed = maxSpeed + boostRasteira;
-
-            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 90);
-            
-        }
-        if(Input.GetKeyUp("s"))
-        {
-            rasteira = false;
-            moveSpeed = maxSpeed;
-
-            transform.position = new Vector3(transform.position.x, transform.position.y + 15, transform.position.z);
-            transform.rotation =  Quaternion.Euler(transform.localEulerAngles.x, transform.localEulerAngles.y , 0);
-        }
-
-        if(rasteira)
-        {
-            if(moveSpeed > 0)
-            {
-                moveSpeed -= 0.6f;
-            }
-            else
-            {
-                moveSpeed = 0;
-            }            
-        }
-
-
-    
-        //ATAQUE
-        if(Input.GetMouseButtonDown(0) && canAtack && DamageForce == false)
-        {
-            Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
-            CheckCircle(cols);
-            isAtack = true;
-            arma = Instantiate(espada, atackPos.position , atackPos.rotation);
-        }
-
-        if(Input.GetMouseButton(0) && canAtack && DamageForce == false)
-        {
-            if(CurrentMana > 0)
-            {
-                Collider2D[] cols = Physics2D.OverlapCircleAll(atackPos.position, radiusAtack);
-                CheckCircle(cols);
-                isAtack = true;
-                arma.transform.position = atackPos.position;
-                arma.transform.rotation = atackPos.rotation;
-
-                tempAtack += Time.deltaTime;
-
-                if(tempAtack >= tempMaxAtackMana)
+                if((Input.GetButton("Jump") || Input.GetKeyDown("w")) && (elapsedTimeSinceJump < maxJumpTime))
                 {
-                    managerForce.ChangeMana(-1.1f);
+                    rb.gravityScale = jumpGravityStart;
+                }
+                else
+                {
+                    rb.gravityScale = 2.5f;
                 }
             }
-            else
+
+            //Sacar ou guardar Sabre
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                if(haveSabre)
+                {
+                    canAtack = !canAtack;
+
+                    if(canAtack)
+                    {
+                        lightSaber.pitch = Random.Range(0.95f, 1.05f);
+                        lightSaber.volume = Random.Range(0.1f, 0.25f);
+                        lightSaber.Play();
+                    }
+                    else
+                    {
+                        lightSaberOff.pitch = Random.Range(0.95f, 1.05f);
+                        lightSaberOff.volume = Random.Range(0.1f, 0.25f);
+                        lightSaberOff.Play();
+                    }
+                }
+            }
+            
+
+            //RASTEIRA
+            if(Input.GetKeyDown("s") && isMove() && isGround())
+            {
+                rasteira = true;
+                moveSpeed = maxSpeed + boostRasteira;
+
+                GetComponent<CapsuleCollider2D>().enabled = false;
+                GetComponent<BoxCollider2D>().enabled = false;
+                transform.GetChild(2).GetComponent<CapsuleCollider2D>().enabled = true;
+                transform.GetChild(2).GetComponent<BoxCollider2D>().enabled = true;
+
+                dashSound.pitch = Random.Range(0.4f, 0.65f);
+                dashSound.volume = Random.Range(0.25f, 0.5f);
+                dashSound.Play();
+                
+            }
+            if(Input.GetKeyUp("s") || !isGround())
+            {
+                rasteira = false;
+                moveSpeed = maxSpeed;
+
+                GetComponent<CapsuleCollider2D>().enabled = true;
+                GetComponent<BoxCollider2D>().enabled = true;
+                transform.GetChild(2).GetComponent<CapsuleCollider2D>().enabled = false;
+                transform.GetChild(2).GetComponent<BoxCollider2D>().enabled = false;
+            }
+            
+            if(rasteira)
+            {
+                if(moveSpeed > 0)
+                {
+                    moveSpeed -= 0.6f;
+                }
+                else
+                {
+                    moveSpeed = 0;
+                }            
+            }
+
+
+        
+            //ATAQUE
+            if(Input.GetMouseButtonDown(0) && canAtack && !isMove())
+            {
+                isAtack = true;
+                tempForDamageAtack = 0.13f;
+                
+                
+                lightSaberAtack.pitch = Random.Range(0.95f, 1.1f);
+                lightSaberAtack.volume = Random.Range(0.07f, 0.15f);
+                lightSaberAtack.Play();
+            
+            }
+
+            if(tempForDamageAtack > 0)
+            {
+                tempForDamageAtack -= Time.deltaTime;
+
+                if(tempForDamageAtack <= 0)
+                {
+                    Collider2D[] cols = Physics2D.OverlapCircleAll(atackFrontPos.position, radiusAtack);
+                    CheckCircle(cols);
+                }
+            }
+
+            if(Input.GetMouseButton(0) && canAtack&& !isMove() && tempForDamageAtack <= 0)
+            {
+                if(CurrentMana > 0)
+                {
+                    Collider2D[] cols = Physics2D.OverlapCircleAll(atackFrontPos.position, radiusAtack);
+                    CheckCircle(cols);
+                    isAtack = true;
+
+                    tempAtack += Time.deltaTime;
+
+                    if(tempAtack >= tempMaxAtackMana)
+                    {
+                        managerForce.ChangeMana(-1.1f);
+                    }
+
+                    if(!(lightSaberDefend.isPlaying))
+                    {
+                        lightSaberDefend.pitch = Random.Range(0.8f, 1.1f);
+                        lightSaberDefend.volume = Random.Range(0.7f, 0.9f);
+                        lightSaberDefend.Play();
+                    }
+                }
+                else
+                {
+                    tempAtack = 0;
+                    isAtack = false;
+                    
+                    if(lightSaberDefend.isPlaying)
+                    {
+                        lightSaberDefend.Stop();
+                    }
+                }
+            }
+
+            if(Input.GetMouseButtonUp(0) && canAtack && !isMove())
             {
                 tempAtack = 0;
                 isAtack = false;
-                Destroy(arma.gameObject);
-            }
-        }
 
-        if(Input.GetMouseButtonUp(0) && canAtack)
-        {
-            if(arma.gameObject != null)
+                if(lightSaberDefend.isPlaying)
+                {
+                    lightSaberDefend.Stop();
+                }
+            }
+
+
+            //FLIP Player
+            if(rb.velocity.x < -0.1f)
             {
-                tempAtack = 0;
-                isAtack = false;
-                Destroy(arma.gameObject);
+                Vector3 currentRotation = transform.rotation.eulerAngles;
+                currentRotation.y = 180;
+                transform.rotation = Quaternion.Euler(currentRotation);
             }
-        }
+            else if(rb.velocity.x > 0.1f)
+            {
+                Vector3 currentRotation = transform.rotation.eulerAngles;
+                currentRotation.y = 0;
+                transform.rotation = Quaternion.Euler(currentRotation);
+            }
 
-
-        //FLIP Player
-        if(rb.velocity.x < -0.1f)
-        {
-            Vector3 currentRotation = transform.rotation.eulerAngles;
-            currentRotation.y = 180;
-            transform.rotation = Quaternion.Euler(currentRotation);
-        }
-        else if(rb.velocity.x > 0.1f)
-        {
-            Vector3 currentRotation = transform.rotation.eulerAngles;
-            currentRotation.y = 0;
-            transform.rotation = Quaternion.Euler(currentRotation);
-        }
-
-
-        if(tempImovel > 0)
-        {
-            rb.velocity = new Vector3(0,0,0);
-            tempImovel -= Time.deltaTime;
-        }
-
-
-        //sofrer forca boss
-        if(DamageForce == true)
-        {
-            rb.gravityScale = 0;
+            //animator
+            animator.SetBool("dash", rasteira);
+            animator.SetBool("canAtack", canAtack);
+            animator.SetBool("atack", isAtack);
         }
         else
         {
-            rb.gravityScale = 2.5f;
+            animator.SetFloat("AbsSpeedX", 0);
+            rb.gravityScale = 0f;
         }
-
     }
 
     private void CheckCircle(Collider2D[] cols)
@@ -285,9 +347,8 @@ public class Player : Character
 
             if (col.gameObject.CompareTag("door"))
             {   
-                //ativar animacao e dps destruir
+                SoundManager.instance.PlaySound(destruirSound, 1, Random.Range(0.95f, 1.05f));
                 Destroy(col.gameObject);
-                //cinemachineShake.Instance.ShakeCamera(100, 0.1f);
             }
 
             if(col.gameObject.CompareTag("boss"))
@@ -299,8 +360,13 @@ public class Player : Character
 
     public void GetSabre()
     {
+        haveSabre = true;
         canAtack = true;
+
+        lightSaber.volume = 0.15f;
+        lightSaber.Play();
     }
+
 
     protected override void OnDrawGizmosSelected()
     {
@@ -309,7 +375,7 @@ public class Player : Character
         if(isAtack)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(atackPos.position, radiusAtack);
+            Gizmos.DrawSphere(atackFrontPos.position, radiusAtack);
         }
     }
 
@@ -336,11 +402,6 @@ public class Player : Character
         return false;
     }
 
-    public void setImovel(float temp)
-    {
-        tempImovel = temp;
-    }
-
     public void GotoSafe()
     {
         if(vida > 0)
@@ -351,8 +412,11 @@ public class Player : Character
 
     protected override void onDeath()
     {
+        PlayerPrefs.SetInt("mortes", PlayerPrefs.GetInt("mortesAntigas"));
+
+
+        GameObject.Find("LevelLoader").GetComponent<LevelLoader>().LoadNextLevel("menu");        
         base.onDeath();
-        SceneManager.LoadScene("menu");
     }
     
 }

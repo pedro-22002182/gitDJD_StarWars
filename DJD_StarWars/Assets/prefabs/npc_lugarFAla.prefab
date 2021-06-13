@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7508319908370987311}
   - component: {fileID: 7508319908370987310}
   - component: {fileID: 7508319908370987305}
+  - component: {fileID: 5932634639496032552}
   m_Layer: 0
   m_Name: npc_lugarFAla
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 7508319908370987309}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 325, y: -127, z: -12.652584}
-  m_LocalScale: {x: 225.03206, y: 225.03206, z: 225.03206}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -73,12 +74,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.7216981, g: 0.9632157, b: 1, a: 1}
+  m_Sprite: {fileID: -6085960417928374660, guid: ba20d3e1144593e4988d9ddeb11fd243, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 26, y: 35}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -97,18 +98,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.050186396, y: 0.23821965}
+  m_Offset: {x: -2.774994, y: 13.860519}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.2}
-    newSize: {x: 0.2, y: 0.2}
+    oldSize: {x: 26, y: 35}
+    newSize: {x: 26, y: 35}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.30037278, y: 0.8937616}
+  m_Size: {x: 29.939697, y: 66.58072}
   m_EdgeRadius: 0
 --- !u!114 &7508319908370987305
 MonoBehaviour:
@@ -132,3 +133,24 @@ MonoBehaviour:
   - nome: GAJO
     text: Cheiras MAL!
     img: {fileID: 0}
+  AtivarInstantaneo: 0
+  playMusicCantina: 0
+--- !u!95 &5932634639496032552
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7508319908370987309}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 288ef56abf88fed4c847ac56f5be56be, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

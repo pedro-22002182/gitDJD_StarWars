@@ -4,17 +4,11 @@ using UnityEngine;
 
 public class playerDead : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField]
+    private Transform spawnCaixa;
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -24,7 +18,18 @@ public class playerDead : MonoBehaviour
             Player character = collision.GetComponent<Player>();
             character.takeDamage(1); //character.getVidaMax()
             character.GotoSafe();
-           
+        }
+
+        if(collision.gameObject.tag == "caixa")
+        {   
+            Instantiate(collision.gameObject, spawnCaixa.position, collision.transform.rotation);
+            Destroy(collision.gameObject);
+        }   
+
+        if(collision.gameObject.tag == "enemy")
+        {   
+            PlayerPrefs.SetInt("mortes", PlayerPrefs.GetInt("mortes") + 1);
+            Destroy(collision.gameObject);
         }
     }
 }

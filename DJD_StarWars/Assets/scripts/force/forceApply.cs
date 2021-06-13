@@ -9,22 +9,7 @@ public class forceApply : MonoBehaviour
     private float speedHoldForce = 0.92f;  
 
     [SerializeField]
-    private float forcaGasta;  
-
-
-    //Variables for held
-    private Vector3 startPos;
-    private bool isBeingHeld = false;
-    private bool canHeld;
-
-
-    private bool isThrow;
-    private float timeThrow;
-    private Rigidbody2D rb;
-
-
-
-    private forceMAnagent fManager;
+    private float forcaGasta;
 
     [SerializeField]
     private bool moveOnlyY;
@@ -43,22 +28,36 @@ public class forceApply : MonoBehaviour
     private float maxX;
 
     [SerializeField]
-    private float minX;
+    private float minX;  
+
+
+    //Variables for held
+    private Vector3 startPos;
+    private bool isBeingHeld = false;
+    private bool canHeld;
+
+
+    private bool isThrow;
+    private float timeThrow;
+    private Rigidbody2D rb;
 
     private bool lockObject;
+    private ForceManagent fManager;
 
 
+    //sons
+    [SerializeField]
+    private AudioSource colSound;
     
 
     // Start is called before the first frame update
     void Start()
     {
-        fManager = FindObjectOfType<forceMAnagent>();
+        fManager = FindObjectOfType<ForceManagent>();
+        rb = GetComponent<Rigidbody2D>();
 
         isThrow = true;
         canHeld = false;
-        rb = GetComponent<Rigidbody2D>();
-
     }
 
     // Update is called once per frame
@@ -66,11 +65,38 @@ public class forceApply : MonoBehaviour
     {
         float currentMana = fManager.getCurrentMana();
 
+        //Se poder agarrar o objeto (tendo rato em cima)
+        if(canHeld)
+        {
+            if(Input.GetMouseButtonDown(1))
+            {
+                startPos = transform.position;
+                rb.gravityScale = 0;   
+
+                isBeingHeld = true;
+                fManager.getImageEffect().color = new Color32(0,161,128,255);
+
+                if(currentMana <= 0 || lockObject == true)
+                    fManager.PlayLockSound();
+            }
+
+            if(Input.GetMouseButtonUp(1))
+            {
+                isBeingHeld = false;
+                rb.gravityScale = 1; 
+
+                fManager.getImageEffect().color = new Color32(0,161,128,0);
+            }
+        }
+
+
+        //Se o estiver a segurar e com mana > 0 e nao estiver trancado e o player parado
         if(isBeingHeld == true && currentMana > 0 && !lockObject && fManager.isMove() == false)
         {
             Vector3 mousePos = fManager.GetMousePos();
             Vector3 endPos = new Vector3(mousePos.x, mousePos.y, transform.position.z);
             
+            //movimento apenas em Y
             if(moveOnlyY)
             {
                 if(transform.position.y > maxY)
@@ -79,70 +105,55 @@ public class forceApply : MonoBehaviour
                     lockObject = true;
                 }
                 else if(endPos.y < minY)
-                {
-                    endPos = new Vector3(transform.position.x, minY+0.1f, transform.position.z);
-                }
+                    endPos = new Vector3(transform.position.x, minY, transform.position.z);
                 else
-                {
- 
                     endPos = new Vector3(transform.position.x, endPos.y, transform.position.z);
-                }
-            }
 
-            if(moveOnlyX)
+                transform.position = Vector3.Lerp(startPos, endPos, speedHoldForce);
+            }
+            //movimento apenas em X
+            else if(moveOnlyX)
             {
                 if(endPos.x > maxX)
-                {
-                    endPos = new Vector3(maxX-0.1f, transform.position.y, transform.position.z);
-                }
+                    endPos = new Vector3(maxX, transform.position.y, transform.position.z);
+
                 else if(transform.position.x < minX)
-                {
-                    endPos = new Vector3(minX+0.1f, transform.position.y, transform.position.z);
-                }
+                    endPos = new Vector3(minX, transform.position.y, transform.position.z);
+
                 else
                 {
                     endPos = new Vector3(endPos.x, transform.position.y, transform.position.z);
+                    transform.position = Vector3.Lerp(startPos, endPos, speedHoldForce);
                 }
-
             }
-            
+            //Movimento Livre
+            else
+            {
+                transform.position = Vector3.Lerp(startPos, endPos, speedHoldForce);
+            }
 
-            transform.position = Vector3.Lerp(startPos, endPos, speedHoldForce);
             fManager.ChangeMana(-forcaGasta);
-            
+            fManager.PlayForceSound();
         }
         else
         {
-            if(moveOnlyX)
-            {
-                rb.velocity = new Vector3(0,rb.velocity.y,0);
-
-                if(transform.position.x > maxX)
-                {
-                    transform.position = new Vector3(maxX-0.1f, transform.position.y, transform.position.z);
-                }
-                else if(transform.position.x < minX)
-                {
-                    transform.position = new Vector3(minX+0.1f, transform.position.y, transform.position.z);
-                }
-                else
-                {
-                    transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-                }
-            }
+            lockMoveX();
         }
 
-
+        //sem mana ou o player a mexer a força não é possivel, nem atirar objeto
         if(currentMana <= 0 || fManager.isMove() == true)
         {
             isBeingHeld = false;
             isThrow = true;
+
             rb.gravityScale = 1; 
-            fManager.getImageEffect().color = new Color32(115,227,241,0);
+
+            fManager.getImageEffect().color = new Color32(0,161,128,0);
+            fManager.StopForceSound();
         }
 
-        //ATIRAR OBJECTO OU INIMIGO
-        if(isThrow == false && isBeingHeld == false && currentMana > 0 && moveOnlyY == false && moveOnlyX == false)
+        //ATIRAR OBJECTO/INIMIGO
+        if(isThrow == false && isBeingHeld == false && currentMana > 0 && (!(moveOnlyY) && (!(moveOnlyX))))
         { 
             timeThrow += Time.deltaTime;
             
@@ -156,56 +167,62 @@ public class forceApply : MonoBehaviour
                 
                 rb.AddForce(direction * -distSpeed * fManager.getSpeedThorw());
 
+                //inimigo levar dano queda
+                if((GetComponent<InimigoComum>() != null) && distSpeed > 30)
+                    GetComponent<InimigoComum>().levarDanoQueda();
+                
                 isThrow = true;
                 timeThrow = 0;
-
-                //Debug.Log(distSpeed);
-                //levar dano queda
-                if((GetComponent<InimigoComum>() != null) && distSpeed > 30)
-                {
-                    GetComponent<InimigoComum>().levarDanoQueda();
-                }
+                fManager.PlayAtirarSound();
             }
-        }
-
-        if(canHeld)
-        {
-            if(Input.GetMouseButtonDown(1))
-            {
-                startPos = transform.position;
-                isBeingHeld = true;
-                rb.gravityScale = 0;   
-
-                fManager.getImageEffect().color = new Color32(115,227,241,51);
-            }
-
-            if(Input.GetMouseButtonUp(1))
-            {
-                isBeingHeld = false;
-                rb.gravityScale = 1; 
-
-                fManager.getImageEffect().color = new Color32(115,227,241,0);
-            }
-        }
-        
-        
+        }        
     }
 
-    private void OnMouseEnter()
-    {
-        canHeld = true;
-    }
+    private void OnMouseEnter() => canHeld = true;
+
     private void OnMouseExit()
     {   
         if(isBeingHeld == true)
         {
-            fManager.getImageEffect().color = new Color32(115,227,241,0);
-
             isBeingHeld = false;
             isThrow = false;
-        }
-        rb.gravityScale = 1; 
 
+            fManager.getImageEffect().color = new Color32(0,161,128,0);
+            fManager.StopForceSound();
+        }
+
+        rb.gravityScale = 1; 
         canHeld = false;
+    }
+
+
+    //quando o objeto não está a ser mexido
+    private void lockMoveX()
+    {
+        if(moveOnlyX)
+        {
+            rb.velocity = new Vector3(0,rb.velocity.y,0);
+
+            if(transform.position.x > maxX)
+                transform.position = new Vector3(maxX-0.1f, transform.position.y, transform.position.z);
+
+            else if(transform.position.x < minX)
+                transform.position = new Vector3(minX+0.1f, transform.position.y, transform.position.z);
+            
+            else
+                transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        float dist = Vector3.Distance(transform.position, GameObject.Find("player").transform.position);
+
+        if(colSound && dist < 350 && col.gameObject.layer == LayerMask.NameToLayer("ground") && !(colSound.isPlaying))
+        {
+            colSound.pitch = Random.Range(0.5f, 1.3f);
+            colSound.volume = Random.Range(0.1f, 0.6f);
+            colSound.Play();
+        }
     }
 }
