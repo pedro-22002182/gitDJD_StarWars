@@ -317,6 +317,7 @@ public class Player : Character
             }
 
             //animator
+            //animator.SetBool("jump", !isGround());
             animator.SetBool("dash", rasteira);
             animator.SetBool("canAtack", canAtack);
             animator.SetBool("atack", isAtack);
