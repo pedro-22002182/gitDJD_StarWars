@@ -244,6 +244,10 @@ public class Player : Character
                 lightSaberAtack.Play();
             
             }
+            else
+            {
+                isAtack = false;
+            }
 
             if(tempForDamageAtack > 0)
             {

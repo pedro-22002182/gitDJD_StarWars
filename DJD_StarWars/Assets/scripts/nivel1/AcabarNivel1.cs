@@ -34,7 +34,7 @@ public class AcabarNivel1 : MonoBehaviour
 
         if(valor < valorAtual)
         {
-            valorAtual -= 0.00015f;
+            valorAtual -= 0.00055f;
         }
 
         vignette.intensity.value = valorAtual;

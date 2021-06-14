@@ -93,6 +93,7 @@ public class forceApply : MonoBehaviour
         //Se o estiver a segurar e com mana > 0 e nao estiver trancado e o player parado
         if(isBeingHeld == true && currentMana > 0 && !lockObject && fManager.isMove() == false)
         {
+            rb.velocity = new Vector3(0,0,0); 
             Vector3 mousePos = fManager.GetMousePos();
             Vector3 endPos = new Vector3(mousePos.x, mousePos.y, transform.position.z);
             

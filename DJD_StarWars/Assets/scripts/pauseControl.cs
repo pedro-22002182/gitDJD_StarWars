@@ -43,6 +43,6 @@ public class pauseControl : MonoBehaviour
     {
         PlayerPrefs.SetInt("mortes", PlayerPrefs.GetInt("mortesAntigas"));
         Time.timeScale = 1;
-        GameObject.Find("LevelLoader").GetComponent<LevelLoader>().LoadNextLevel("niveis");
+        GameObject.Find("LevelLoader").GetComponent<LevelLoader>().LoadNextLevel("menu");
     }
 }
